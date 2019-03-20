@@ -1,0 +1,27 @@
+{
+    "rest": {
+        "tokenizer": {
+            "host": "http://dighx05.interno:8888",
+            "getToken": {
+                "timeout": 5,
+                "method": "post",
+                "Content-Type": "application/x-www-form-urlencoded",
+                "chave": "000000",
+                "endpoint": ":host/getToken"
+            },
+            "getDados": {
+                "timeout": 5,
+                "method": "post",
+                "Content-Type": "application/x-www-form-urlencoded",
+                "chave": "000000",
+                "endpoint": ":host/getDados"
+            }
+        }
+    },
+    "soap": {
+        "auditable": {
+            "endpoint": "http://digpx12.interno:8070/auditoria-webservice/services/AuditoriaServiceImpl",
+            "ttl": 600
+        }
+    }
+}
