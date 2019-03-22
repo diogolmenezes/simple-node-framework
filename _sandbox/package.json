@@ -1,0 +1,14 @@
+{
+  "name": "simple-sandbox",
+  "version": "1.0.0",
+  "description": "This is the sandbox application to help the simple framework developers to test features.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "simple-node-framework": "file:.."
+  }
+}
