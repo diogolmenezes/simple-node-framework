@@ -27,7 +27,10 @@
     },
     "redis": {
         "host": "localhost",
-        "port": 6379
+        "port": 6379,
+        "mock": {
+            "Test": 1
+        }
     },
     "log": {
         "debug": true,
@@ -76,8 +79,8 @@
                 "/doc/"
             ],
             "require": {
-                "application": true,
-                "channel": true,
+                "application": false,
+                "channel": false,
                 "device": false
             }
     },

@@ -1,0 +1,38 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debugar - Local",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceRoot}/_sandbox/index.js",
+            "cwd": "${workspaceRoot}/_sandbox",
+            "env": {
+                "NODE_ENV": "default"
+            }
+        },
+        {
+            "name": "Debugar - Produção",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceRoot}/_sandbox/index.js",
+            "cwd": "${workspaceRoot}/_sandbox",
+            "env": {
+                "NODE_ENV": "production"
+            }
+        },
+        {
+            "name": "Debugar - Homologação",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceRoot}/_sandbox/index.js",
+            "cwd": "${workspaceRoot}/_sandbox",
+            "env": {
+                "NODE_ENV": "staging"
+            }
+        }
+    ]
+}
