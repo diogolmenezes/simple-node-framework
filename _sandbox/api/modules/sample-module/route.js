@@ -1,10 +1,13 @@
 const server = require('../../../index.js');
-const { route, redis } = require('simple-node-framework');
-const { info }  = route.info(__filename);
+const Controller = require('./controller')
+const { route, ControllerFactory, Cache, authorization } = require('simple-node-framework');
+const { full }  = route.info(__filename);
 
-server.get('/teste', (req, res, next) => {
-    res.send('Olaaa');
-    redis.set('MINHA', 'VALOR');
-    redis.delPattern('*')
-    return next();
-});
+// sample of cached route
+server.get(`${full}/`, [ Cache.loadResponse ],ControllerFactory.build(Controller, 'get'));
+
+// sample of protected route
+server.get(`${full}/protected`, [
+    authorization.protect.bind(authorization),
+    Cache.loadResponse
+],ControllerFactory.build(Controller, 'get'));

@@ -27,10 +27,11 @@
     },
     "redis": {
         "host": "localhost",
-        "port": 6379,
-        "mock": {
-            "Test": 1
-        }
+        "port": 6379
+    },
+    "cache": {
+        "enabled": true,
+        "headerKey": "x-cpf"
     },
     "log": {
         "debug": true,
@@ -48,7 +49,7 @@
         }
     },
     "authorization": {
-        "enabled": false,
+        "enabled": true,
         "scheme": "Bearer",
         "jwt": {
             "secret": "49b4e2f9-ec31-4758-bae5-741a80e0e8de",

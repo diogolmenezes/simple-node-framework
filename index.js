@@ -1,7 +1,4 @@
-const {
-    authorization,
-    Authorization
-} = require('./lib/authorization');
+const authorization = require('./lib/authorization');
 const config = require('./lib/config');
 const configFramework = require('./config/config-framework');
 const applicationError = require('./lib/errors');
@@ -11,7 +8,7 @@ const session = require('./lib/session');
 const SessionHandler = require('./lib/util/session-handler');
 const route = require('./lib/route');
 const Server = require('./lib/server');
-const cache = require('./lib/cache');
+const Cache = require('./lib/cache');
 const database = require('./lib/database');
 const TestHelper = require('./lib/test');
 const Loggable = require('./lib/base/loggable');
@@ -25,10 +22,9 @@ const BaseSoap = require('./lib/base/base-soap');
 const tokenizer = require('./lib/tokenizer');
 const Helper = require('./lib/util/helpers');
 const ProcessTimer = require('./lib/util/process-timer');
-const ControllerFactory = require('./lib/controller-factory');
+const ControllerFactory = require('./lib/util/controller-factory');
 
 module.exports = {
-    Authorization,
     Base: {
         BaseClass,
         BaseController,
@@ -48,7 +44,7 @@ module.exports = {
     TestHelper,
     applicationError,
     authorization,
-    cache,
+    Cache,
     config,
     configFramework,
     logger,
