@@ -1,0 +1,104 @@
+{
+    "app": {
+        "name": "my-application",
+        "baseRoute": "/api",
+        "port": 8094
+    },
+    "cors": {
+        "preflightMaxAge": 5,
+        "origins": [
+            "*"
+        ],
+        "allowHeaders": [
+            "x-origin-channel",
+            "x-origin-application",
+            "x-origin-device"
+        ],
+        "exposeHeaders": []
+    },
+    "db": {
+        "application": {
+            "url": "mongodb://localhost:27017/my-application",
+            "options": {
+                "useNewUrlParser": true,
+                "poolSize": 10
+            }
+        }
+    },
+    "redis": {
+        "host": "localhost",
+        "port": 6379
+    },
+    "log": {
+        "debug": true,
+        "bunyan": {
+            "name": "Application",
+            "streams": [
+                {
+                    "level": "debug",
+                    "type": "rotating-file",
+                    "path": "logs/{hostname}.log",
+                    "period": "1d",
+                    "count": 2
+                }
+            ]
+        }
+    },
+    "authorization": {
+        "enabled": false,
+        "scheme": "Bearer",
+        "jwt": {
+            "secret": "49b4e2f9-ec31-4758-bae5-741a80e0e8de",
+            "expiresIn": "1h"
+        }
+    },
+    "audit": {
+        "enabled": true,
+        "printLog": true,
+        "bunyan": {
+            "name": "Audit",
+            "streams": [
+                {
+                    "level": "debug",
+                    "type": "rotating-file",
+                    "path": "logs/audit.log",
+                    "period": "1d",
+                    "count": 2
+                }
+            ]
+        }
+    },
+    "origin": {
+            "ignoreExact": [
+                "/"
+            ],
+            "ignore": [
+                "/doc/"
+            ],
+            "require": {
+                "application": true,
+                "channel": true,
+                "device": false
+            }
+    },
+    "integrations": 
+    {
+        "rest": {
+            "sampleRest": {
+                "timeout": 3,
+                "endpoint": "http://dummy.restapiexample.com/api/v1/employees"
+            },
+            "sampleRest2": {
+                "timeout": 3,
+                "endpoint": "http://..."
+            }
+        },
+        "soap": {
+            "servico1": {
+                "timeout": 5,
+                "wsdl": "http://...?wsdl",
+                "endpoint": "http://..."
+            }
+        }
+    }
+}
