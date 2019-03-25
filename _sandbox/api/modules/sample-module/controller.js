@@ -14,6 +14,16 @@ class Controller extends BaseController {
         req.cache.saveResponse(200, 'Sample controller test', res.headers, req);
         return next();
     }
+
+    // session sample
+    session(req, res, next) {
+        super.activateRequestLog(req);
+        req.session.data.name = 'Diogo';
+        req.session.update();
+        console.log('SESSION DATA =>', req.session.data);
+        res.send(200, 'Sample session controller test');
+        return next();
+    }
 }
 
 module.exports = Controller;

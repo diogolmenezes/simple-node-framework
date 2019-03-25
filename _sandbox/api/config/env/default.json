@@ -31,7 +31,12 @@
     },
     "cache": {
         "enabled": true,
-        "headerKey": "x-cpf"
+        "headerKey": "x-identifier"
+    },
+    "session": {
+        "prefix": "myapplication",
+        "headerKey": "x-identifier",
+        "ttl": 3600
     },
     "log": {
         "debug": true,

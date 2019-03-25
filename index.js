@@ -4,7 +4,6 @@ const applicationError = require('./lib/errors');
 const logger = require('./lib/log');
 const redis = require('./lib/redis');
 const session = require('./lib/session');
-const SessionHandler = require('./lib/util/session-handler');
 const route = require('./lib/route');
 const Server = require('./lib/server');
 const Cache = require('./lib/cache');
@@ -36,7 +35,6 @@ module.exports = {
     Loggable,
     ProcessTimer,
     Server,
-    SessionHandler,
     TestHelper,
     applicationError,
     authorization,
