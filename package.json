@@ -1,13 +1,19 @@
 {
   "name": "simple-node-framework",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "keywords": [
     "basic",
     "simple",
     "easy",
     "framework",
     "node",
-    "api"
+    "api",
+    "cache",
+    "log",
+    "database",
+    "session",
+    "redis",
+    "scope"
   ],
   "tags": [
     "basic",
@@ -15,10 +21,16 @@
     "easy",
     "framework",
     "node",
-    "api"
+    "api",
+    "cache",
+    "log",
+    "database",
+    "session",
+    "redis",
+    "scope"
   ],
   "author": "Diogo Menezes <diogolmenezes@gmail.com>",
-  "description": "Easy framework to create nodeJs apis.",
+  "description": "Simple nodeJs framework that provides easy ways to use log, cache, database, session, redis, share request scope and more.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
