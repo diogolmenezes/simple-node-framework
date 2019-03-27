@@ -4,20 +4,20 @@ SNF is a simple node-js framework that provides simple ways to use log, cache, d
 
 - [Quick Start](#quick-start)
 - [Configuration](#configuration)
-- [Database](#database)
-- [Log](#log)
 - [Base Classes](#base-classes)
-- [Plugins](#plugins)
-- [Server](#server)
-- [Config](#config)
-- [Util](#util)
-- [Route](#route)
-- [Erros](#erros)
+- [Log](#log)
+- [Database](#database)
 - [Redis](#redis)
 - [Cache](#cache)
 - [Session](#session)
 - [Authorization](#authorization)
+- [Server](#server)
+- [Route](#route)
+- [Plugins](#plugins)
+- [Config](#config)
 - [Request Scope](#request-scope)
+- [Util](#util)
+- [Erros](#erros)
 - [Test](#test)
 
 ## Quick Start
@@ -38,57 +38,43 @@ There are _1 file per environment (default, testing, staging, production)_, so i
 
 `NODE_ENV=production node index`
 
-## Database
+## Base Classes
 
-You can disable database handler by removing the "db" node at configuration file, or just runing [create-snf-app](https://github.com/diogolmenezes/create-snf-app) using the --disable-database option.
+Base classes are the most used strategy in SNF. Your class can inherit the base class and have your features and log prefixes.
 
-SNF support multiple connections in Mongo Databases, so you have to configure like this:
+[create-snf-app](https://github.com/diogolmenezes/create-snf-app) has many examples of base class use.
 
-```json
-    "db": {
-        "first": {
-            "url": "mongodb://localhost:27017/my-database",
-            "options": {
-                "useNewUrlParser": true,
-                "poolSize": 10
-            }
-        },
-        "second": {
-            "url": "mongodb://server1:27017,server2:27017,server3:27017,server4:27017/other-database?replicaSet=rs0",
-            "options": {
-                "user": "some-user",
-                "pass": "some-password",
-                "useMongoClient": true,
-                "poolSize": 10,
-                "keepAlive": 300000,
-                "connectTimeoutMS": 30000
-            }
-        }
-    }
-```
-
-> By the way, the options node is mongoose options
-
-If you want to do this you can use the secong connection like _database.connections.second_.
+| Base Class     | Description                                                                                                                    |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| Base           | Log and timer features, the this.log and this.timer objects will be ready to use                                               |
+| BaseController | Log and timer features, the this.log and this.timer objects will be ready to use                                               |
+| BaseService    | Log and timer features, the this.log and this.timer objects will be ready to use                                               |
+| BaseRepository | Log and timer features, the this.log and this.timer objects will be ready to use                                               |
+| BaseRest       | Rest features. this.fetch (node-fetch), this.responseHandler, this.log and this.timer objects will be ready to use             |
+| BaseSoap       | Soap features. this.fetch (node-fetch), this.soap (soap), this.xml_parser this.log and this.timer objects will be ready to use |
+| Loggable       | Log features, the this.log object will be ready to use                                                                         |
 
 ```javascript
-const { database } = require('simple-node-framework');
-const connection = database.connections.second;
+const { BaseController } = require('simple-node-framework').Base;
+const CustomerService = require('./service/customer-service');
 
-// mongoose model configuration start
-const schema = mongoose.Schema(
-    {
-        nome: String
-    },
-    {
-        collection: 'customers'
+// sample controller
+class Controller extends BaseController {
+    constructor() {
+        super({
+            module: 'My Sample Controller' // the module name will prefix all your logs
+        });
     }
-);
 
-const model = connection.model('Customer', schema);
-// mongoose model configuration end
+    async load(req, res, next) {
+        super.activateRequestLog(req);
+        this.log.debug('This is only a sample');
+        req.send(200);
+        return next();
+    }
+}
 
-this.model.findOne({ name });
+module.exports = Controller;
 ```
 
 ## Log
@@ -192,44 +178,70 @@ this.log.debug('This is only a log', { natural: people, pretty: people });
 {"name":"Application","host":"agility","hostname":"agility","pid":12488,"level":20,"natural":{"name":"Jhon","age":35},"pretty":"{\"age\": 35, \"name\": \"Jhon\"}","msg":"My Sample Controller =>  This is only a log","time":"2019-03-27T19:35:01.323Z","v":0}
 ```
 
-## Base Classes
+## Database
 
-Base classes are the most used strategy in SNF. Your class can inherit the base class and have your features and log prefixes.
+You can disable database handler by removing the "db" node at configuration file, or just runing [create-snf-app](https://github.com/diogolmenezes/create-snf-app) using the --disable-database option.
 
-[create-snf-app](https://github.com/diogolmenezes/create-snf-app) has many examples of base class use.
+SNF support multiple connections in Mongo Databases, so you have to configure like this:
 
-| Base Class     | Description                                                                                                                    |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| Base           | Log and timer features, the this.log and this.timer objects will be ready to use                                               |
-| BaseController | Log and timer features, the this.log and this.timer objects will be ready to use                                               |
-| BaseService    | Log and timer features, the this.log and this.timer objects will be ready to use                                               |
-| BaseRepository | Log and timer features, the this.log and this.timer objects will be ready to use                                               |
-| BaseRest       | Rest features. this.fetch (node-fetch), this.responseHandler, this.log and this.timer objects will be ready to use             |
-| BaseSoap       | Soap features. this.fetch (node-fetch), this.soap (soap), this.xml_parser this.log and this.timer objects will be ready to use |
-| Loggable       | Log features, the this.log object will be ready to use                                                                         |
+```json
+    "db": {
+        "first": {
+            "url": "mongodb://localhost:27017/my-database",
+            "options": {
+                "useNewUrlParser": true,
+                "poolSize": 10
+            }
+        },
+        "second": {
+            "url": "mongodb://server1:27017,server2:27017,server3:27017,server4:27017/other-database?replicaSet=rs0",
+            "options": {
+                "user": "some-user",
+                "pass": "some-password",
+                "useMongoClient": true,
+                "poolSize": 10,
+                "keepAlive": 300000,
+                "connectTimeoutMS": 30000
+            }
+        }
+    }
+```
+
+> By the way, the options node is mongoose options
+
+If you want to do this you can use the secong connection like _database.connections.second_.
 
 ```javascript
-const { BaseController } = require('simple-node-framework').Base;
-const CustomerService = require('./service/customer-service');
+const { database } = require('simple-node-framework');
+const connection = database.connections.second;
 
-// sample controller
-class Controller extends BaseController {
-    constructor() {
-        super({
-            module: 'My Sample Controller' // the module name will prefix all your logs
-        });
+// mongoose model configuration start
+const schema = mongoose.Schema(
+    {
+        nome: String
+    },
+    {
+        collection: 'customers'
     }
+);
 
-    async load(req, res, next) {
-        super.activateRequestLog(req);
-        this.log.debug('This is only a sample');
-        req.send(200);
-        return next();
-    }
-}
+const model = connection.model('Customer', schema);
+// mongoose model configuration end
 
-module.exports = Controller;
+this.model.findOne({ name });
 ```
+
+## Redis
+
+## Cache
+
+## Session
+
+## Authorization
+
+## Server
+
+## Route
 
 ## Plugins
 
@@ -265,26 +277,14 @@ You can turn if of in configuration.
 
 ### Request and Response Plugin
 
-This plugin will automaticaly log all requests and responses. It will enabled by default and the only way to disable it is overriding the *configureMiddlewares* method at SNF *Server* Class.
-
-## Server
+This plugin will automaticaly log all requests and responses. It will enabled by default and the only way to disable it is overriding the _configureMiddlewares_ method at SNF _Server_ Class.
 
 ## Config
 
+## Request Scope
+
 ## Util
 
-## Route
-
 ## Errors
-
-## Redis
-
-## Cache
-
-## Session
-
-## Authorization
-
-## Request Scope
 
 ## Test
