@@ -2,91 +2,96 @@
 
 SNF is a simple node-js framework that provides simple ways to use log, cache, database, session, redis, request scope and more.
 
-- A
-- B
-- C
+-   [Quick Start](#quick-start)
+-   [Configuration](#configuration)
+-   [Database](#database)
+-   [Log](#log)
 
-# Get started
+## Quick Start
 
-## 1. SNF bootstrap
-
-The best way to get started with SNF is using our bootstrap application.
-
-`npx create-snf-app my-app`
-
-## 2. Install NFS Manualy
-
-The best way to get started with SNF is using our bootstrap application. But if you want, you can do this manualy.
-
-`npm i simple-node-framework --save`
-
-### 2.1 Basic file structure
-
-This is the basic file scructure required by simple-node-framework. To install manualy you have to create this folder structure.
+The best way to get started with SNF is using [create-snf-app](https://github.com/diogolmenezes/create-snf-app)
 
 ```shell
-├── api
-│   ├── config/
-│   │   └── env/  (environment configuration files like staging.json, production.json)
-│   │       ├── default.json
-│   └── modules/ (here you can create your own application modules)
-│       └── sample-module/
-│           ├── controller.js
-│           ├── route.js
-├── logs/
-├── index.js
-├── package.json
+npx create-snf-app my-app --disable-database --disable-redis -p 8091
+cd my-app
+npm start
 ```
 
-### 2.2 Default configuration file example
+## Configuration
 
-This is the most complete example of configuration file. If you dont whant to use a feature just remove the equivalente configuration node at this file.
+If you are using [create-snf-app](https://github.com/diogolmenezes/create-snf-app) all SNF configuration is located at api/config/env.
+
+There are _1 file per environment (default, testing, staging, production)_, so its possible to execute the application using an defined environment.
+
+`NODE_ENV=production node index`
+
+## Database
+
+You can disable database handler by removing the "db" node at configuration file, or just runing [create-snf-app](https://github.com/diogolmenezes/create-snf-app) using the --disable-database option.
+
+SNF support multiple connections in Mongo Databases, so you have to configure like this:
 
 ```json
-/api/config/env/default.json
-
-{
-    "app": {
-        "name": "my-application",
-        "baseRoute": "/api",
-        "port": 8094
-    },
-    "cors": {
-        "preflightMaxAge": 5,
-        "origins": [
-            "*"
-        ],
-        "allowHeaders": [
-            "x-origin-channel",
-            "x-origin-application",
-            "x-origin-device",
-            "x-identifier"
-        ],
-        "exposeHeaders": []
-    },
     "db": {
-        "application": {
-            "url": "mongodb://localhost:27017/my-application",
+        "first": {
+            "url": "mongodb://localhost:27017/my-database",
             "options": {
                 "useNewUrlParser": true,
                 "poolSize": 10
             }
+        },
+        "second": {
+            "url": "mongodb://server1:27017,server2:27017,server3:27017,server4:27017/other-database?replicaSet=rs0",
+            "options": {
+                "user": "some-user",
+                "pass": "some-password",
+                "useMongoClient": true,
+                "poolSize": 10,
+                "keepAlive": 300000,
+                "connectTimeoutMS": 30000
+            }
         }
+    }
+```
+
+> By the way, the options node is mongoose options
+
+If you want to do this you can use the secong connection like _database.connections.second_.
+
+```javascript
+const { database } = require('simple-node-framework');
+const connection = database.connections.second;
+
+// mongoose model configuration start
+const schema = mongoose.Schema(
+    {
+        nome: String
     },
-    "redis": {
-        "host": "localhost",
-        "port": 6379
-    },
-    "cache": {
-        "enabled": true,
-        "headerKey": "x-identifier"
-    },
-    "session": {
-        "prefix": "my-application",
-        "headerKey": "x-identifier",
-        "ttl": 3600
-    },
-    "log": {
+    {
+        collection: 'customers'
+    }
+);
+
+const model = connection.model('Customer', schema);
+// mongoose model configuration end
+
+this.model.findOne({ name });
+```
+
+## Log
+
+SNF has an smart log feature that will be turned on by default.
+
+### Log Configuration
+
+The logs will be saved at _logs folder_ at root of the application.
+
+If you turn of _debug_ SNF will not output logs at your console, by default we turn of debug logs in production environment.
+
+SNF uses bunyan to write great logs, so we have a node to configure bunyan too.
+
+```json
+"log": {
         "debug": true,
         "bunyan": {
             "name": "Application",
@@ -100,110 +105,74 @@ This is the most complete example of configuration file. If you dont whant to us
                 }
             ]
         }
-    },
-    "authorization": {
-        "enabled": false,
-        "scheme": "Bearer",
-        "jwt": {
-            "secret": "put_your_own_secret_here",
-            "expiresIn": "1h"
-        }
-    },
-    "audit": {
-        "enabled": true,
-        "printLog": true,
-        "bunyan": {
-            "name": "Audit",
-            "streams": [
-                {
-                    "level": "debug",
-                    "type": "rotating-file",
-                    "path": "logs/audit.log",
-                    "period": "1d",
-                    "count": 2
-                }
-            ]
-        }
-    },
-    "origin": {
-        "ignoreExact": [
-            "/"
-        ],
-        "ignore": [
-            "/doc/"
-        ],
-        "require": {
-            "application": false,
-            "channel": false,
-            "device": false
-        }
     }
-}
 ```
 
-## 2.3 Controller
+### Log methods
 
-```javascript
-// modules/sample-module/controller.js
+- this.log.info
+- this.log.debug
+- this.log.warn
+- this.log.error
+- this.log.fatal
 
-const { BaseController } = require('simple-node-framework').Base;
+### Prefixed logs
 
-class Controller extends BaseController {
-    constructor() {
-        super({
-            module: 'My Sample Controller'
-        });
-    }
-
-    get(req, res, next) {
-        super.activateRequestLog(req);
-        this.log.debug('This is a sample log');
-        res.send(200, 'Sample controller test');
-        return next();
-    }
-}
-
-module.exports = Controller;
-```
-
-## 2.4 Route
-
-```javascript
-// modules/sample-module/route.js
-
-const { route, ControllerFactory } = require('simple-node-framework');
-const server = require('../../../index.js');
-const Controller = require('./controller');
-
-const { full } = route.info(__filename);
-
-server.get(`${full}/`, ControllerFactory.build(Controller, 'get'));
-```
-
-## 2.5 Server
-
-```javascript
-// index.js
-
-const { Server } = require('simple-node-framework');
-
-module.exports = new Server().configure();
-```
-## 2.5 Starting the server
-
-Before starting, make sure you have a redis and mongo server running and that their addresses are correct in the application configuration file. Otherwise you can disable redis and mongo by just removing the keys from the configuration file.
-
-Now, start the aplication and test if is running http://localhost:8094/api/sample-module/.
-
-`node index.js`
+All the logs will be automaticaly prefixed with module name, so if you write a log at controller class it will be prefixed with "Controller Name =>". This way you can view your application flow.
 
 ```shell
-dmenezes@agility:~/projetos/sample-application$ node index.js
+DEBUG My Sample Controller =>  Loading customer [diogo]
+DEBUG Customer Service =>  Loading customer [diogo]
+DEBUG Customer Repository =>  Loading customer [diogo]
+```
 
-DEBUG SNF Server =>  Cache has been configured
-DEBUG SNF Server =>  Session has been configured
-DEBUG SNF Server =>  The sandbox is running as [default] [http://localhost:8094/]
-DEBUG SNF Route =>  Importing [sample-module] routes from [api/modules/sample-module/route.js]
-DEBUG SNF Redis =>  Connected at REDIS [localhost:6379]
-DEBUG SNF Database =>  Connected at database [application] [mongodb://localhost:27017/my-application]
+### Request id in the log
+
+SNF log will automaticaly attach your request-id in the log if you call _super.activateRequestLog(req)_ in the first line of your controller method.
+
+```json
+{ "name": "Application", "host": "agility", "hostname": "agility", "pid": 11155, "level": 20, "pretty": "{\"obj\": {\"_obj\": undefined, \"request_id\": \"1a2dd75cd83847429c0985fa5ed337f4\"}}", "msg": "Customer Repository =>  Loading customer [diogo]", "time": "2019-03-27T19:15:17.354Z", "v": 0 }
+```
+
+### Hostname in the log
+
+SNF attach your /etc/hostname in the log, this way you can discover witch machine is writing the logs
+
+```json
+{ "name": "Application", "host": "agility", "hostname": "agility", "pid": 11155, "level": 20, "pretty": "{\"obj\": {\"_obj\": undefined, \"request_id\": \"1a2dd75cd83847429c0985fa5ed337f4\"}}", "msg": "Customer Repository =>  Loading customer [diogo]", "time": "2019-03-27T19:15:17.354Z", "v": 0 }
+```
+
+### Logs with objects
+
+Its possible to write logs with an JSON object. SNF will stringfy and prettfy your object before write.
+
+```javascript
+const people = { name: 'Jhon', age: 35 };
+this.log.debug('This is only a log', people);
+```
+
+```shell
+{"name":"Application","host":"agility","hostname":"agility","pid":11627,"level":20,"pretty":"{\"obj\": {\"age\": 35, \"name\": \"Jhon\"}}","msg":"My Sample Controller =>  This is only a log","time":"2019-03-27T19:23:34.229Z","v":0}
+```
+
+If you want to log an object in json format, just sent inside a "natural" property this way the object will not be stringfied.
+
+```javascript
+const people = { name: 'Jhon', age: 35 };
+this.log.debug('This is only a log', { natural: people });
+```
+
+```shell
+{"name":"Application","host":"agility","hostname":"agility","pid":11765,"level":20,"natural":{"name":"Jhon","age":35},"msg":"My Sample Controller =>  This  is only a log","time":"2019-03-27T19:25:36.431Z","v":0}
+```
+
+If you need log one object as natural mode and another as string on the same call, just send "natural" and "pretty" properties:
+
+```javascript
+const people = { name: 'Jhon', age: 35 };
+this.log.debug('This is only a log', { natural: people, pretty: people });
+```
+
+```shell
+{"name":"Application","host":"agility","hostname":"agility","pid":12488,"level":20,"natural":{"name":"Jhon","age":35},"pretty":"{\"age\": 35, \"name\": \"Jhon\"}","msg":"My Sample Controller =>  This is only a log","time":"2019-03-27T19:35:01.323Z","v":0}
 ```
