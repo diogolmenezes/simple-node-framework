@@ -2,10 +2,23 @@
 
 SNF is a simple node-js framework that provides simple ways to use log, cache, database, session, redis, request scope and more.
 
--   [Quick Start](#quick-start)
--   [Configuration](#configuration)
--   [Database](#database)
--   [Log](#log)
+- [Quick Start](#quick-start)
+- [Configuration](#configuration)
+- [Database](#database)
+- [Log](#log)
+- [Base Classes](#base-classes)
+- [Plugins](#plugins)
+- [Server](#server)
+- [Config](#config)
+- [Util](#util)
+- [Route](#route)
+- [Erros](#erros)
+- [Redis](#redis)
+- [Cache](#cache)
+- [Session](#session)
+- [Authorization](#authorization)
+- [Request Scope](#request-scope)
+- [Test](#test)
 
 ## Quick Start
 
@@ -110,11 +123,13 @@ SNF uses bunyan to write great logs, so we have a node to configure bunyan too.
 
 ### Log methods
 
-- this.log.info
-- this.log.debug
-- this.log.warn
-- this.log.error
-- this.log.fatal
+```javascript
+this.log.info('Sample info log');
+this.log.debug('Sample debug log', { people, status: 'active' });
+this.log.warg('Sample warn log');
+this.log.error('Sample error log', error);
+this.log.fatal('Sample fatal log', error);
+```
 
 ### Prefixed logs
 
@@ -176,3 +191,100 @@ this.log.debug('This is only a log', { natural: people, pretty: people });
 ```shell
 {"name":"Application","host":"agility","hostname":"agility","pid":12488,"level":20,"natural":{"name":"Jhon","age":35},"pretty":"{\"age\": 35, \"name\": \"Jhon\"}","msg":"My Sample Controller =>  This is only a log","time":"2019-03-27T19:35:01.323Z","v":0}
 ```
+
+## Base Classes
+
+Base classes are the most used strategy in SNF. Your class can inherit the base class and have your features and log prefixes.
+
+[create-snf-app](https://github.com/diogolmenezes/create-snf-app) has many examples of base class use.
+
+| Base Class     | Description                                                                                                                    |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| Base           | Log and timer features, the this.log and this.timer objects will be ready to use                                               |
+| BaseController | Log and timer features, the this.log and this.timer objects will be ready to use                                               |
+| BaseService    | Log and timer features, the this.log and this.timer objects will be ready to use                                               |
+| BaseRepository | Log and timer features, the this.log and this.timer objects will be ready to use                                               |
+| BaseRest       | Rest features. this.fetch (node-fetch), this.responseHandler, this.log and this.timer objects will be ready to use             |
+| BaseSoap       | Soap features. this.fetch (node-fetch), this.soap (soap), this.xml_parser this.log and this.timer objects will be ready to use |
+| Loggable       | Log features, the this.log object will be ready to use                                                                         |
+
+```javascript
+const { BaseController } = require('simple-node-framework').Base;
+const CustomerService = require('./service/customer-service');
+
+// sample controller
+class Controller extends BaseController {
+    constructor() {
+        super({
+            module: 'My Sample Controller' // the module name will prefix all your logs
+        });
+    }
+
+    async load(req, res, next) {
+        super.activateRequestLog(req);
+        this.log.debug('This is only a sample');
+        req.send(200);
+        return next();
+    }
+}
+
+module.exports = Controller;
+```
+
+## Plugins
+
+SNF has some plugins to help you.
+
+### Origin Plugin
+
+The origin plugin will force that the api requesters sends some identification headers.
+
+| Header               | Description                                                   |
+| -------------------- | ------------------------------------------------------------- |
+| x-origin-application | Witch application is calling the api Ex.: billing-application |
+| x-origin-channel     | Witch chanhel is calling the api Ex.: web, mobile             |
+| x-origin-device      | Witch device is calling the api Ex.: app-ios, app-android     |
+
+You can turn if of in configuration.
+
+```json
+"origin": {
+            "ignoreExact": [
+                "/"
+            ],
+            "ignore": [
+                "/doc/"
+            ],
+            "require": {
+                "application": true,
+                "channel": true,
+                "device": false
+            }
+    }
+```
+
+### Request and Response Plugin
+
+This plugin will automaticaly log all requests and responses. It will enabled by default and the only way to disable it is overriding the *configureMiddlewares* method at SNF *Server* Class.
+
+## Server
+
+## Config
+
+## Util
+
+## Route
+
+## Errors
+
+## Redis
+
+## Cache
+
+## Session
+
+## Authorization
+
+## Request Scope
+
+## Test
