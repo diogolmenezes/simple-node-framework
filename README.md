@@ -34,7 +34,7 @@ npm start
 
 If you are using [create-snf-app](https://github.com/diogolmenezes/create-snf-app) all SNF configuration is located at api/config/env.
 
-There are _1 file per environment (default, testing, staging, production)_, so its possible to execute the application using an defined environment.
+There are *1 file per environment (default, testing, staging, production)*, so its possible to execute the application using an defined environment.
 
 `NODE_ENV=production node index`
 
@@ -83,11 +83,11 @@ SNF has an smart log feature that will be turned on by default.
 
 ### Log Configuration
 
-The logs will be saved at _logs folder_ at root of the application.
+The logs will be saved at *logs folder* at root of the application.
 
-If you turn of _debug_ SNF will not output logs at your console, by default we turn of debug logs in production environment.
+If you turn of *debug* SNF will not output logs at your console, by default we turn of debug logs in production environment.
 
-SNF uses bunyan to write great logs, so we have a node to configure bunyan too.
+> SNF uses [bunyan](https://www.npmjs.com/package/bunyan) to write great logs, so we have a node to configure bunyan too.
 
 ```json
 "log": {
@@ -129,7 +129,7 @@ DEBUG Customer Repository =>  Loading customer [diogo]
 
 ### Request id in the log
 
-SNF log will automaticaly attach your request-id in the log if you call _super.activateRequestLog(req)_ in the first line of your controller method.
+SNF log will automaticaly attach your request-id in the log if you call *super.activateRequestLog(req)* in the first line of your controller method.
 
 ```json
 { "name": "Application", "host": "agility", "hostname": "agility", "pid": 11155, "level": 20, "pretty": "{\"obj\": {\"_obj\": undefined, \"request_id\": \"1a2dd75cd83847429c0985fa5ed337f4\"}}", "msg": "Customer Repository =>  Loading customer [diogo]", "time": "2019-03-27T19:15:17.354Z", "v": 0 }
@@ -207,12 +207,12 @@ You can disable database handler by removing the "db" node at configuration file
     }
 ```
 
-> By the way, we use mongoose client and the options node is mongoose options
+> By the way, we use [mongoose](https://www.npmjs.com/package/mongoose) client and the options node is mongoose options
 
-If you want to do this you can use the secong connection like _database.connections.second_.
+If you want to do this you can use the secong connection like *database.connections.second*.
 
 ```javascript
-const { database } = require('simple-node-framework');
+const { database } = require('simple-node-framework').Singleton;
 const connection = database.connections.second;
 
 // mongoose model configuration start
@@ -237,7 +237,7 @@ SNF support has a redis handler to simplify connection and use.
 
 You can disable redis handler by removing the "redis" node at configuration file, or just runing [create-snf-app](https://github.com/diogolmenezes/create-snf-app) using the --disable-redis option.
 
-> By the way, we use io-redis as redis client.
+> By the way, we use [io-redis](https://github.com/luin/ioredis) as redis client.
 
 Basic configuration:
 
@@ -284,7 +284,7 @@ Advanced configuration:
 Using:
 
 ```javascript
-const { redis } = require('simple-node-framework');
+const { redis } = require('simple-node-framework').Singleton;
 
 // save user age in redis
 const ttl = 300000; // 300000 miliseconds = 5 minutes
@@ -349,7 +349,8 @@ After this the cache handler will save in your redis the key:
 To automaticaly retreive your information, you need to configure the Cache.loadResponse middleware, so your controller will start get the information from the cache:
 
 ```javascript
-const { route, ControllerFactory, Cache } = require('simple-node-framework');
+const { ControllerFactory, Cache } = require('simple-node-framework');
+const { route } = require('simple-node-framework').Singleton;
 const server = require('../../../index.js');
 const Controller = require('./controller');
 
@@ -521,7 +522,8 @@ This scheme is not considered to be a secure method of user authentication unles
 To protect your route with basic authorization you have to use the authorization middleware.
 
 ```javascript
-const { route, ControllerFactory, authorization } = require('simple-node-framework');
+const { ControllerFactory } = require('simple-node-framework');
+const { route, authorization } = require('simple-node-framework').Singleton;
 const server = require('../../../index.js');
 const Controller = require('./controller');
 const { full } = route.info(__filename);
@@ -580,7 +582,8 @@ TLS is mandatory to implement and use with this specification.
 To protect your route with basic authorization you have to use the authorization middleware.
 
 ```javascript
-const { route, ControllerFactory, authorization } = require('simple-node-framework');
+const { ControllerFactory } = require('simple-node-framework');
+const { route, authorization } = require('simple-node-framework').Singleton;
 const server = require('../../../index.js');
 const Controller = require('./controller');
 const { full } = route.info(__filename);
@@ -676,7 +679,56 @@ module.exports = new CustomAuthorization();
 
 ## Server
 
+The server class is the most important class in SNF because there we configure all other plugins, middlewares and helpers.
+
+> By the way, we use [restify](https://www.npmjs.com/package/restify) as rest framework.
+
+### Custom server
+
+> ATENTION: Before create your custom server, plese take a look at base Server class https://github.com/diogolmenezes/simple-node-framework/blob/master/lib/server.js You have to be mutch careful if you want to override this class because some default behavors may stop work after this.
+
+```javascript
+const { Server } = require('simple-node-framework');
+
+class CustomServer extends Server {   
+    constructor() {
+        super({
+            module: 'Custom Server'
+        });
+    }
+
+    // You can override server methods :)
+    applyMiddlewares() {
+        super.applyMiddlewares();
+        this.log.debug('This is only a custom messagem from your custom server :)');
+    }
+
+    // You can override server methods :)
+    applyAudit() {
+        super.applyAudit();
+        this.log.debug('This is only another custom messagem from your custom server :)');
+    }
+
+    // .. you can override all other methods ...
+}
+
+module.exports = CustomServer
+```
+
 ## Route
+
+The rote class is responsible for import all module routes and provide helper methods.
+
+The info method return information about the route. By default SNF uses the app.baseRoute configuration as the base route of your api, so
+a full route is the union of baseRoute + moduleName
+
+```javascript
+const { authorization, route } = require('simple-node-framework').Singleton;
+const routeFile = __filename;
+
+// ex: { baseRoute: '/api', module: 'customer', full: '/api/customer' }
+const info = route.info(routeFile);
+```    
 
 ## Plugins
 
@@ -712,11 +764,86 @@ You can turn if of in configuration.
 
 ### Request and Response Plugin
 
-This plugin will automaticaly log all requests and responses. It will enabled by default and the only way to disable it is overriding the _configureMiddlewares_ method at SNF _Server_ Class.
+This plugin will automaticaly log all requests and responses. It will enabled by default and the only way to disable it is overriding the *configureMiddlewares* method at SNF *[Server](#server)* Class.
 
 ## Config
 
+The configuration is responsible for importing the correct configuration file according to the environment (*NODE_ENV*).
+
+All configuration files are located at *api/config/env* directory.
+
+If you dont define an *NODE_ENV*, SNF will import the default env file.
+
+```shell
+$ NODE_ENV=staging node index
+
+$ NODE_ENV=testing node index
+
+$ NODE_ENV=production node index
+```
+
 ## Request Scope
+
+Request Scope is a feature that creates an scope to share information between objects.
+
+All SNF base classes have the scope feature, because, one of best uses of scope is to share information on request lifecicle.
+
+> By the way scope is a port os [ScopeJs](https://github.com/diogolmenezes/scope).
+
+To get more scope examples go to [ScopeJs documentation](https://github.com/diogolmenezes/scope)
+
+```javascript
+const { BaseController } = require('simple-node-framework').Base;
+
+// sample controller
+class Controller extends BaseController {
+    constructor() {
+        super({
+            module: 'My Sample Controller' // the module name will prefix all your logs
+        });
+        this.peopleService  = require('./people-service');
+    }
+
+    async get(req, res, next) {       
+        // creating the scope and adding some information
+        this.addScope({ name: 'diogo' });
+
+        this.peopleService.doSomething();
+
+        // you can get the scope that service class added
+        console.log('UAU, now we have the Name and the Age information =>', JSON.stringify(this.scope));
+
+        // this.scope
+        // Object {_chain: Array(4), name: "diogo", age: 34}
+
+        req.send(200);
+        
+        return next();
+    }
+}
+
+module.exports = Controller;
+```
+
+```javascript
+const { BaseController } = require('simple-node-framework').Base;
+
+// sample controller
+class PeopleService extends BaseService {
+    constructor() {
+        super({
+            module: 'People Service' 
+        });
+    }
+
+    doSomething() {                
+        // assing more information to the scope
+        this.addScope({ age: 34 });
+    }
+}
+
+module.exports = new PeopleService();
+```
 
 ## Util
 
