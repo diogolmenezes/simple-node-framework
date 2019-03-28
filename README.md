@@ -400,7 +400,7 @@ class AccountController extends BaseController {
     }
 
     login(req, res, next) {
-        if(req.params.user = 'some-user' && req.params.password === 'some-pass') {
+        if ((req.params.user === 'some-user' && req.params.password === 'some-pass')) {
             // create the session
             req.session.data.name = 'Diogo';
             req.session.create('some-user-identifier');
@@ -438,7 +438,7 @@ class UserController extends BaseController {
 
     changeName(req, res, next) {
         // update the session
-        req.session.load('some-user-identifier')
+        req.session.load('some-user-identifier');
         req.session.data.name = 'Diogo Menezes';
         req.session.update();
         res.send(200, 'Sample session controller test');
@@ -468,11 +468,11 @@ class AccountController extends BaseController {
     }
 
     login(req, res, next) {
-        if(req.params.user = 'some-user' && req.params.password === 'some-pass') {
+        if ((req.params.user === 'some-user' && req.params.password === 'some-pass')) {
             // create the session
             req.session.data.name = 'Diogo';
-             // the session is automaticaly be created with "x-identifier" in the key
-            req.session.create(); 
+            // the session is automaticaly be created with "x-identifier" in the key
+            req.session.create();
             res.send(200, 'Sample session controller test');
         }
 
@@ -499,6 +499,180 @@ class UserController extends BaseController {
 ```
 
 ## Authorization
+
+SNF authorization handler protect your API with [Basic](https://tools.ietf.org/html/rfc7617#section-1) or [Bearer](https://tools.ietf.org/html/rfc6750#section-1) methods.
+
+### Basic Authorization
+
+"Basic" Hypertext Transfer Protocol (HTTP) authentication scheme, which transmits credentials as user-id/password pairs, encoded using Base64.
+
+This scheme is not considered to be a secure method of user authentication unless used in conjunction with some external secure system such as TLS (Transport Layer Security, [RFC5246](https://tools.ietf.org/html/rfc5246)), as the user-id and password are passed over the network as cleartext.
+
+```json
+    "authorization": {
+        "enabled": true,
+        "basic": {
+            "username": "admin",
+            "password": "admin"
+        }
+    }
+```
+
+To protect your route with basic authorization you have to use the authorization middleware.
+
+```javascript
+const { route, ControllerFactory, authorization } = require('simple-node-framework');
+const server = require('../../../index.js');
+const Controller = require('./controller');
+const { full } = route.info(__filename);
+
+server.get(`${full}/protected`, [authorization.protect.bind(authorization)], ControllerFactory.build(Controller, 'get'));
+```
+
+Your controller dont need to be changed, all the work is made by the middleware.
+
+```javascript
+const { BaseController } = require('simple-node-framework').Base;
+
+class Controller extends BaseController {
+    constructor() {
+        super({
+            module: 'My Sample Controller'
+        });
+    }
+
+    get(req, res, next) {
+        res.send(200, 'Sample controller test');
+        return next();
+    }
+}
+
+module.exports = Controller;
+```
+
+Now, when your API receive a request without an basic authorization header the middlware will return "401 Unauthorized".
+
+If the API receive an invalid user and password will return "403 Forbidden".
+
+If everything is ok the midleware will pass to the next() stef of the chain.
+
+### Bearer Authorization
+
+The Bearer authentication scheme is intended primarily for server authentication using the WWW-Authenticate and Authorization HTTP headers.
+
+OAuth enables clients to access protected resources by obtaining an access token, which is defined as "a string representing an access authorization issued to the client", rather than using the resource owner's credentials directly.
+
+Tokens are issued to clients by an authorization server with the approval of the resource owner. The client uses the access token to
+access the protected resources hosted by the resource server. This OAuth access token is a bearer token.
+
+TLS is mandatory to implement and use with this specification.
+
+```json
+    "authorization": {
+        "enabled": true,
+        "jwt": {
+            "secret": "use-an-difficult-and-unique-secret-here",
+            "expiresIn": "1h"
+        }
+    }
+```
+
+To protect your route with basic authorization you have to use the authorization middleware.
+
+```javascript
+const { route, ControllerFactory, authorization } = require('simple-node-framework');
+const server = require('../../../index.js');
+const Controller = require('./controller');
+const { full } = route.info(__filename);
+
+server.get(`${full}/protected`, [authorization.protect.bind(authorization)], ControllerFactory.build(Controller, 'get'));
+```
+
+Your controller dont need to be changed, all the work is made by the middleware.
+
+```javascript
+const { BaseController } = require('simple-node-framework').Base;
+
+class Controller extends BaseController {
+    constructor() {
+        super({
+            module: 'My Sample Controller'
+        });
+    }
+
+    get(req, res, next) {
+        res.send(200, 'Sample controller test');
+        return next();
+    }
+}
+
+module.exports = Controller;
+```
+
+Now, when your API receive a request without an baerer authorization header the middlware will return "401 Unauthorized".
+
+If the API receive an invalid token will return "403 Forbidden".
+
+If everything is ok the midleware will pass to the next() stef of the chain.
+
+To generate a valid JWT token, you can use the createJWT helper method.
+
+```javascript
+const { BaseController } = require('simple-node-framework').Base;
+
+class AccountController extends BaseController {
+    constructor() {
+        super({
+            module: 'My Sample Account Controller'
+        });
+    }
+
+    login(req, res, next) {
+        const user = sample.GetUser(req.params.user, req.params.pass)
+
+        if (user) {
+            // create the JWT token to use as Bearer Token
+            const token = authorization.createJWT({ name = user.name })
+            res.send(200, token);
+        }
+
+        res.send(403);
+        return next();
+    }
+}
+```
+
+Now you can send this JWT token at authorization header to all protected api calls of this user.
+
+### Custom Authorization
+
+Like almost everything in SNF framework, the authorization class can be overrided, so you can create your custom-authorization class and customize the authorization methods.
+
+```javascript
+const { Authorization } = require('simple-node-framework');
+
+class CustomAuthorization extends Authorization {
+    constructor() {
+        super({
+            module: 'Custom Authorization'
+        });
+    }
+
+    // do the basic validation of credentials
+    basicValidate(req, res, next) {
+        const { username, password } = req.authorization.basic;
+
+        if (sampleValidadeUserInTheDatabase(username, password)) {
+            req.user = req.username;
+            next();
+        } else {
+            next(this.applicationErrors.throw('Invalid username or password', 'ForbiddenError'));
+        }
+    }
+}
+
+module.exports = new CustomAuthorization();
+```
 
 ## Server
 
@@ -534,7 +708,7 @@ You can turn if of in configuration.
                 "device": false
             }
     }
-````
+```
 
 ### Request and Response Plugin
 
