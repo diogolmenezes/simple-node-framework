@@ -2,23 +2,23 @@
 
 SNF is a simple node-js framework that provides simple ways to use log, cache, database, session, redis, request scope and more.
 
-- [Quick Start](#quick-start)
-- [Configuration](#configuration)
-- [Base Classes](#base-classes)
-- [Log](#log)
-- [Database](#database)
-- [Redis](#redis)
-- [Cache](#cache)
-- [Session](#session)
-- [Authorization](#authorization)
-- [Server](#server)
-- [Route](#route)
-- [Plugins](#plugins)
-- [Config](#config)
-- [Request Scope](#request-scope)
-- [Util](#util)
-- [Erros](#erros)
-- [Test](#test)
+-   [Quick Start](#quick-start)
+-   [Configuration](#configuration)
+-   [Base Classes](#base-classes)
+-   [Log](#log)
+-   [Database](#database)
+-   [Redis](#redis)
+-   [Cache](#cache)
+-   [Session](#session)
+-   [Authorization](#authorization)
+-   [Server](#server)
+-   [Route](#route)
+-   [Plugins](#plugins)
+-   [Config](#config)
+-   [Request Scope](#request-scope)
+-   [Util](#util)
+-   [Erros](#erros)
+-   [Test](#test)
 
 ## Quick Start
 
@@ -180,9 +180,9 @@ this.log.debug('This is only a log', { natural: people, pretty: people });
 
 ## Database
 
-You can disable database handler by removing the "db" node at configuration file, or just runing [create-snf-app](https://github.com/diogolmenezes/create-snf-app) using the --disable-database option.
+SNF support multiple connections in Mongo Databases.
 
-SNF support multiple connections in Mongo Databases, so you have to configure like this:
+You can disable database handler by removing the "db" node at configuration file, or just runing [create-snf-app](https://github.com/diogolmenezes/create-snf-app) using the --disable-database option.
 
 ```json
     "db": {
@@ -207,7 +207,7 @@ SNF support multiple connections in Mongo Databases, so you have to configure li
     }
 ```
 
-> By the way, the options node is mongoose options
+> By the way, we use mongoose client and the options node is mongoose options
 
 If you want to do this you can use the secong connection like _database.connections.second_.
 
@@ -233,9 +233,270 @@ this.model.findOne({ name });
 
 ## Redis
 
+SNF support has a redis handler to simplify connection and use.
+
+You can disable redis handler by removing the "redis" node at configuration file, or just runing [create-snf-app](https://github.com/diogolmenezes/create-snf-app) using the --disable-redis option.
+
+> By the way, we use io-redis as redis client.
+
+Basic configuration:
+
+```json
+    "redis": {
+        "host": "localhost",
+        "ttl": 86400,
+        "port": 6379
+    },
+```
+
+Advanced configuration:
+
+```json
+    "redis": {
+        "ttl": 86400,
+        "name": "some-name",
+        "password": "some-password",
+        "sentinels": [
+            {
+                "host": "server1",
+                "port": 26380
+            },
+            {
+                "host": "server2",
+                "port": 26380
+            }
+        ],
+        "preferredSlaves": [
+            {
+                "ip": "server1",
+                "port": "6380",
+                "flags": "master"
+            },
+            {
+                "ip": "server2",
+                "port": "6380",
+                "flags": "slave"
+            }
+        ]
+    }
+```
+
+Using:
+
+```javascript
+const { redis } = require('simple-node-framework');
+
+// save user age in redis
+const ttl = 300000; // 300000 miliseconds = 5 minutes
+await redis.set('some-application:some-user:age', 34, 300000);
+
+// get user age from redis
+const age = await redis.get('some-application:some-user:age');
+
+// remove user age from redis
+redis.del('some-application:some-user:age');
+
+// remove all application keys from redis
+redis.delPattern('some-application:*');
+```
+
 ## Cache
 
+SNF has a cache handler that uses redis to save responses on the cache.
+
+> By the way, you need active redis configuration to use this feature
+
+The cache handler idea is to automaticaly retreive response cache if exists.
+
+```json
+    "cache": {
+        "enabled": true,
+        "ttl": 3600
+    }
+```
+
+When the cache feature is active (by default), SNF inject the req.cache object.
+
+So, when you have a sucess at you controller logic save the response on cache like this:
+
+```javascript
+const { BaseController } = require('simple-node-framework').Base;
+
+class Controller extends BaseController {
+    constructor() {
+        super({
+            module: 'My Sample Controller'
+        });
+    }
+
+    get(req, res, next) {
+        const message = 'Sample controller test';
+        res.send(200, message);
+        // save response in the cache
+        const ttl = 300000;
+        req.cache.saveResponse(200, message, res.headers, req, ttl);
+        return next();
+    }
+}
+
+module.exports = Controller;
+```
+
+After this the cache handler will save in your redis the key:
+
+`simple-node-framework:cache:my-application:get:api/sample-module`
+
+To automaticaly retreive your information, you need to configure the Cache.loadResponse middleware, so your controller will start get the information from the cache:
+
+```javascript
+const { route, ControllerFactory, Cache } = require('simple-node-framework');
+const server = require('../../../index.js');
+const Controller = require('./controller');
+
+const { full } = route.info(__filename);
+
+// sample of cached route
+server.get(`${full}/`, [Cache.loadResponse], ControllerFactory.build(Controller, 'get'));
+```
+
+If you set a headerKey at configuration, the cache handler will look for the defined key at the request header and use this key to compose the cache key.
+This way, you can have unique user caches.
+
+```json
+    "cache": {
+        "enabled": true,
+        "ttl": 1800,
+        "headerKey": "x-identifier"
+    }
+```
+
+`simple-node-framework:user-identifier:cache:my-application:get:api/sample-module`
+
 ## Session
+
+SNF has a session handler that uses redis to save application session.
+
+> By the way, you need active redis configuration to use this feature
+
+The session handler idea is to automaticaly retreive the session and append at req.session.
+
+```json
+    "session": {
+        "prefix": "myapplication",
+        "ttl": 3600
+    },
+```
+
+When turned on, you can manipulate session data:
+
+```javascript
+const { BaseController } = require('simple-node-framework').Base;
+
+class AccountController extends BaseController {
+    constructor() {
+        super({
+            module: 'My Sample Account Controller'
+        });
+    }
+
+    login(req, res, next) {
+        if(req.params.user = 'some-user' && req.params.password === 'some-pass') {
+            // create the session
+            req.session.data.name = 'Diogo';
+            req.session.create('some-user-identifier');
+            res.send(200, 'Sample session controller test');
+        }
+
+        res.send(401);
+        return next();
+    }
+
+    logout(req, res, next) {
+        // destroy the session
+        req.session.destroy();
+        res.send(200, 'Sample session controller test');
+        return next();
+    }
+}
+```
+
+And the session will be created:
+
+`myapplication-session:some-user-identifier`
+
+You can change an existing session:
+
+```javascript
+const { BaseController } = require('simple-node-framework').Base;
+
+class UserController extends BaseController {
+    constructor() {
+        super({
+            module: 'My Sample Controller'
+        });
+    }
+
+    changeName(req, res, next) {
+        // update the session
+        req.session.load('some-user-identifier')
+        req.session.data.name = 'Diogo Menezes';
+        req.session.update();
+        res.send(200, 'Sample session controller test');
+        return next();
+    }
+}
+```
+
+Like cache, if you set headerKey at configuration file, SNF will look for defined key at the header os request and automatic load the right session.
+
+```json
+    "session": {
+        "prefix": "myapplication",
+        "headerKey": "x-identifier",
+        "ttl": 3600
+    }
+```
+
+```javascript
+const { BaseController } = require('simple-node-framework').Base;
+
+class AccountController extends BaseController {
+    constructor() {
+        super({
+            module: 'My Sample Account Controller'
+        });
+    }
+
+    login(req, res, next) {
+        if(req.params.user = 'some-user' && req.params.password === 'some-pass') {
+            // create the session
+            req.session.data.name = 'Diogo';
+             // the session is automaticaly be created with "x-identifier" in the key
+            req.session.create(); 
+            res.send(200, 'Sample session controller test');
+        }
+
+        res.send(401);
+        return next();
+    }
+}
+
+class UserController extends BaseController {
+    constructor() {
+        super({
+            module: 'My Sample Controller'
+        });
+    }
+
+    changeName(req, res, next) {
+        // the session is automaticaly loaded  if you send "x-identifier" at the header
+        req.session.data.name = 'Diogo Menezes';
+        req.session.update();
+        res.send(200, 'Sample session controller test');
+        return next();
+    }
+}
+```
 
 ## Authorization
 
@@ -273,7 +534,7 @@ You can turn if of in configuration.
                 "device": false
             }
     }
-```
+````
 
 ### Request and Response Plugin
 

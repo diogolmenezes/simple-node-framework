@@ -31,6 +31,7 @@
     },
     "cache": {
         "enabled": true,
+        "ttl": 3600,
         "headerKey": "x-identifier"
     },
     "session": {
