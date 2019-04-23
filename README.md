@@ -850,3 +850,5 @@ module.exports = new PeopleService();
 ## Errors
 
 ## Test
+
+SNF provides some test facilities especially if you are using SNF by an [create-snf-app](https://github.com/diogolmenezes/create-snf-app) application.
