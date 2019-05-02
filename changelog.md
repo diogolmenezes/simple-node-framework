@@ -1,3 +1,5 @@
+1.0.11
+ - [BUGFIX] Resolvendo BUG do log que fazia com que Exceptions não fossem gravadas
 1.0.10
  - [BUGFIX] Resolvendo BUG do log que fazia com que Exceptions não fossem gravadas
 1.0.9
