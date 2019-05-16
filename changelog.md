@@ -1,3 +1,5 @@
+1.0.13
+ - [BUGFIX] Resolvendo bugs de log
 1.0.12
  - [FEATURE] Add hostname on healthcheck
 1.0.11
