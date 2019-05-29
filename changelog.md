@@ -1,3 +1,5 @@
+1.0.15
+ - [FEATURE] Incluindo suporte ao SSL
 1.0.14
  - [BUGFIX] Resolvendo bugs de log
 1.0.13

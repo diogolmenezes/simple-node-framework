@@ -715,6 +715,37 @@ class CustomServer extends Server {
 module.exports = CustomServer
 ```
 
+### Custom Server SSL HTTPS
+
+To use HTTPS, send httpsOptions to configure method. 
+
+```javascript
+const { Server } = require('simple-node-framework');
+const fs = require('fs');
+
+class CustomServer extends Server {
+    constructor() {
+        super({
+            module: 'SNF Custom Server'
+        });
+    }
+}
+
+const customServer = new CustomServer();
+const server = customServer.configure({
+    httpsOptions: {
+        key: fs.readFileSync(__dirname + '/server.key'),
+        certificate: fs.readFileSync(__dirname + '/server.crt')
+    }
+});
+
+module.exports = {
+    server,
+    baseServer: customServer.baseServer
+};
+
+```
+
 ## Route
 
 The rote class is responsible for import all module routes and provide helper methods.
