@@ -356,7 +356,7 @@ To enable oracle add oracle configuration to config db node.
 
 You you need the [Oracle Instant Client](https://www.oracle.com/technetwork/topics/intel-macsoft-096467.html).
 
-Download the client and extract at ~/lib. After, create ~/lib/network/admin/sqlnet.ora file with DISABLE_OOB=ON configuration.
+*Download the client and extract at ~/lib. After, create ~/lib/network/admin/sqlnet.ora file with DISABLE_OOB=ON configuration.*
 
 More informations about DISABLE_OOB at:
 
