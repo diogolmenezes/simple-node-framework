@@ -180,28 +180,77 @@ this.log.debug('This is only a log', { natural: people, pretty: people });
 
 ## Database
 
-SNF support multiple connections in Mongo Databases.
+SNF support multiple connections at, mongo, oracle and sql server.
 
 You can disable database handler by removing the "db" node at configuration file, or just runing [create-snf-app](https://github.com/diogolmenezes/create-snf-app) using the --disable-database option.
 
 ```json
     "db": {
-        "first": {
-            "url": "mongodb://localhost:27017/my-database",
-            "options": {
-                "useNewUrlParser": true,
-                "poolSize": 10
+        "mongodb": {
+            "first": {
+                "url": "mongodb://localhost:27017/my-database",
+                "options": {
+                    "useNewUrlParser": true,
+                    "poolSize": 10
+                }
+            },
+            "second": {
+                "url": "mongodb://server1:27017,server2:27017,server3:27017,server4:27017/other-database?replicaSet=rs0",
+                "options": {
+                    "user": "some-user",
+                    "pass": "some-password",
+                    "useMongoClient": true,
+                    "poolSize": 10,
+                    "keepAlive": 300000,
+                    "connectTimeoutMS": 30000
+                }
             }
         },
-        "second": {
-            "url": "mongodb://server1:27017,server2:27017,server3:27017,server4:27017/other-database?replicaSet=rs0",
-            "options": {
+        "oracle": {
+            "first": {
                 "user": "some-user",
-                "pass": "some-password",
-                "useMongoClient": true,
-                "poolSize": 10,
-                "keepAlive": 300000,
-                "connectTimeoutMS": 30000
+                "password": "some-password",
+                "connectString": "host/service",
+                "poolMin": 0,
+                "poolMax": 5,
+                "poolIncrement": 0
+            }
+        },
+        "sqlserver": {
+            "first": {
+                "user": "some-user",
+                "password": "some-password",
+                "database": "database",
+                "server": "host"
+            }
+        }
+    }
+```
+
+### MongoDB
+
+To enable mongodb just add mongodb configuration to config db node.
+
+```json
+    "db": {
+        "mongodb": {
+            "first": {
+                "url": "mongodb://localhost:27017/my-database",
+                "options": {
+                    "useNewUrlParser": true,
+                    "poolSize": 10
+                }
+            },
+            "second": {
+                "url": "mongodb://server1:27017,server2:27017,server3:27017,server4:27017/other-database?replicaSet=rs0",
+                "options": {
+                    "user": "some-user",
+                    "pass": "some-password",
+                    "useMongoClient": true,
+                    "poolSize": 10,
+                    "keepAlive": 300000,
+                    "connectTimeoutMS": 30000
+                }
             }
         }
     }
@@ -209,11 +258,11 @@ You can disable database handler by removing the "db" node at configuration file
 
 > By the way, we use [mongoose](https://www.npmjs.com/package/mongoose) client and the options node is mongoose options
 
-If you want to do this you can use the secong connection like *database.connections.second*.
+You can use the secong connection like *database.connections.mongodb.second*.
 
 ```javascript
 const { database } = require('simple-node-framework').Singleton;
-const connection = database.connections.second;
+const connection = database.connections.mongodb.second || mongoose;
 
 // mongoose model configuration start
 const schema = mongoose.Schema(
@@ -229,6 +278,129 @@ const model = connection.model('Customer', schema);
 // mongoose model configuration end
 
 this.model.findOne({ name });
+```
+
+### Sql Server
+
+To enable sqlserver just add sqlserver configuration to config db node.
+
+```json
+    "db": {
+        "sqlserver": {
+            "first": {
+                "user": "some-user",
+                "password": "some-password",
+                "database": "database",
+                "server": "host"
+            }
+        }
+    }
+```
+
+> By the way, we use [mssql](https://www.npmjs.com/package/mssql) client and the options node is mssql options
+
+To use, just get the pool and do the queries.
+
+Internally, each [ConnectionPool](https://www.npmjs.com/package/mssql#connections-1) instance is a separate pool of TDS connections. Once you create a new Request/Transaction/Prepared Statement, a new TDS connection is acquired from the pool and reserved for desired action. *Once the action is complete, connection is released back to the pool*.
+
+For more use samples, please see [mssql documentation](https://www.npmjs.com/package/mssql)
+
+```javascript
+const { BaseService } = require('simple-node-framework').Base;
+const { config, database } = require('simple-node-framework').Singleton;
+
+class PeopleRepository extends BaseService {
+    constructor() {
+        super({
+            module: 'People Repository'
+        });
+
+        this.config = config;
+        this.database = database;
+        this.pool = database.connections.sqlserver.application;
+    }
+
+    async get(id) {
+        const sql = `SELECT * FROM PEOPLE WHERE ID = @id`;
+
+        const result = await this.pool.request()
+            .input('id', id)
+            .query(sql);
+
+        return result;
+    }
+}
+
+module.exports = PeopleRepository;
+
+```
+
+### Oracle
+
+To enable oracle add oracle configuration to config db node.
+
+```json
+    "db": {
+        "oracle": {
+            "first": {
+                "user": "some-user",
+                "password": "some-password",
+                "connectString": "host/service",
+                "poolMin": 0,
+                "poolMax": 5,
+                "poolIncrement": 0
+            }
+        },
+    }
+```
+
+You you need the [Oracle Instant Client](https://www.oracle.com/technetwork/topics/intel-macsoft-096467.html).
+
+Download the client and extract at ~/lib. After, create ~/lib/network/admin/sqlnet.ora file with DISABLE_OOB=ON configuration.
+
+More informations about DISABLE_OOB at:
+
+- [https://oracle.github.io/node-oracledb/doc/api.html#-621-poolclose](https://oracle.github.io/node-oracledb/doc/api.html#-621-poolclose)
+- [https://github.com/oracle/node-oracledb/issues/688](https://github.com/oracle/node-oracledb/issues/688)
+- [https://www.oracle.com/technetwork/database/features/instant-client/ic-faq-094177.html#A5028](https://www.oracle.com/technetwork/database/features/instant-client/ic-faq-094177.html#A5028)
+
+> By the way, we use [oracledb](https://www.npmjs.com/package/oracledb) client and the options node is oracledb options
+
+To use, just get the pool and do the queries. *Here you MUST close the connection after use*.
+
+For more use samples, please see [oracledb documentation](https://oracle.github.io/node-oracledb/doc/api.html)
+
+```javascript
+const { BaseService } = require('simple-node-framework').Base;
+const { config, database } = require('simple-node-framework').Singleton;
+
+class PeopleRepository extends BaseService {
+    constructor() {
+        super({
+            module: 'People Repository'
+        });
+
+        this.config = config;
+        this.database = database;
+        this.pool = database.connections.oracle.application;
+    }
+
+    async get(id) {
+        const connection = await this.pool.getConnection();
+
+        try {
+            const sql = `SELECT * FROM PEOPLE WHERE ID = :id`;
+            const result = await connection.execute(sql, [id], { outFormat: this.database.oracledb.OBJECT });
+            return result;
+
+        } finally {
+            connection.close();
+        }
+    }
+}
+
+module.exports = PeopleRepository;
+
 ```
 
 ## Redis

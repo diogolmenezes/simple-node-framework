@@ -1,3 +1,5 @@
+2.0.0
+ - [FEATURE] Incluindo suporte a ORACLE e SQL SERVER
 1.0.15
  - [FEATURE] Incluindo suporte ao SSL
 1.0.14

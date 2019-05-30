@@ -1,6 +1,6 @@
 {
     "name": "simple-node-framework",
-    "version": "1.0.15",
+    "version": "2.0.0",
     "keywords": [
         "basic",
         "simple",
@@ -51,7 +51,9 @@
         "js-scope": "^1.0.0",
         "jsonwebtoken": "^8.5.1",
         "mongoose": "^5.4.20",
+        "mssql": "^5.1.0",
         "node-fetch": "^2.3.0",
+        "oracledb": "^3.1.2",
         "pretty-format": "^24.5.0",
         "query-string": "^6.4.2",
         "restify": "^8.2.0",
