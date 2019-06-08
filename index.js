@@ -15,6 +15,7 @@ const Log = require('./lib/log');
 const Loggable = require('./lib/base/loggable');
 const ProcessTimer = require('./lib/util/process-timer');
 const Redis = require('./lib/redis');
+const Queue = require('./lib/queue');
 const Route = require('./lib/route');
 const Server = require('./lib/server');
 const Session = require('./lib/session');
@@ -48,6 +49,7 @@ module.exports = {
         errorHandler: ErrorHandler.instance,
         log: Log.instance,
         redis: Redis.instance,
+        queue: Queue.instance,
         route: Route.instance
     },
     TestHelper
