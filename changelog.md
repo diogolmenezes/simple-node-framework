@@ -1,3 +1,5 @@
+2.0.2
+ - [FEATURE] Incluindo suporte a fila amqp
 2.0.1
  - [BUGFIX] Resolvendo problema que acontecia quando não configuravamos nenhum db
 2.0.0

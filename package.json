@@ -1,6 +1,6 @@
 {
     "name": "simple-node-framework",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "keywords": [
         "basic",
         "simple",
@@ -54,6 +54,7 @@
         "mssql": "^5.1.0",
         "node-fetch": "^2.3.0",
         "oracledb": "^3.1.2",
+        "amqplib": "^0.5.3",
         "pretty-format": "^24.5.0",
         "query-string": "^6.4.2",
         "restify": "^8.2.0",
