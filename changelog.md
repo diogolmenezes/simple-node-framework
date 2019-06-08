@@ -1,3 +1,5 @@
+2.0.1
+ - [BUGFIX] Resolvendo problema que acontecia quando não configuravamos nenhum db
 2.0.0
  - [FEATURE] Incluindo suporte a ORACLE e SQL SERVER
 1.0.15
