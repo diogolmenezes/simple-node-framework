@@ -1,3 +1,5 @@
+2.0.3
+ - [FEATURE] Incluindo suporte a fila amqp
 2.0.2
  - [FEATURE] Incluindo suporte a fila amqp
 2.0.1
