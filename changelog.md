@@ -1,3 +1,5 @@
+2.0.5
+ - [BUGFIX] Solving Promise sql error
 2.0.4
  - [BUGFIX] Solving jwt decode error
 2.0.3
