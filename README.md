@@ -91,20 +91,20 @@ If you turn of *debug* SNF will not output logs at your console, by default we t
 
 ```json
 "log": {
-        "debug": true,
-        "bunyan": {
-            "name": "Application",
-            "streams": [
-                {
-                    "level": "debug",
-                    "type": "rotating-file",
-                    "path": "logs/{hostname}.log",
-                    "period": "1d",
-                    "count": 2
-                }
-            ]
-        }
+    "debug": true,
+    "bunyan": {
+        "name": "Application",
+        "streams": [
+            {
+                "level": "debug",
+                "type": "rotating-file",
+                "path": "logs/{hostname}.log",
+                "period": "1d",
+                "count": 2
+            }
+        ]
     }
+}
 ```
 
 ### Log on stdout
@@ -113,17 +113,17 @@ If you need to output bunyan logs to process.stdout, do this configuration
 
 ```json
 "log": {
-        "debug": false,
-        "bunyan": {
-            "name": "Application",
-            "streams": [
-                {
-                    "level": "debug",
-                    "stream": "process.stdout"
-                }
-            ]
-        }
+    "debug": false,
+    "bunyan": {
+        "name": "Application",
+        "streams": [
+            {
+                "level": "debug",
+                "stream": "process.stdout"
+            }
+        ]
     }
+}
 ```
 
 ### Log methods
