@@ -1,3 +1,5 @@
+2.0.6
+ - [FEATURE] Add process.stdout stream to bunyan
 2.0.5
  - [BUGFIX] Solving Promise sql error
 2.0.4
