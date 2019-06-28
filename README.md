@@ -107,6 +107,25 @@ If you turn of *debug* SNF will not output logs at your console, by default we t
     }
 ```
 
+### Log on stdout
+
+If you need to output bunyan logs to process.stdout, do this configuration
+
+```json
+"log": {
+        "debug": false,
+        "bunyan": {
+            "name": "Application",
+            "streams": [
+                {
+                    "level": "debug",
+                    "stream": "process.stdout"
+                }
+            ]
+        }
+    }
+```
+
 ### Log methods
 
 ```javascript
