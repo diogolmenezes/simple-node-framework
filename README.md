@@ -16,6 +16,7 @@ SNF is a simple node-js framework that provides simple ways to use log, cache, d
 -   [Plugins](#plugins)
 -   [Config](#config)
 -   [Request Scope](#request-scope)
+-   [Audit](#audit)
 -   [Util](#util)
 -   [Erros](#erros)
 -   [Test](#test)
@@ -1065,6 +1066,29 @@ class PeopleService extends BaseService {
 }
 
 module.exports = new PeopleService();
+```
+## Audit
+
+The audit module uses restify [audit logger](http://restify.com/docs/plugins-api/#auditlogger). To use, include this
+configuration at your config file.
+
+```json
+    "audit": {
+        "enabled": true,
+        "printLog": true,
+        "bunyan": {
+            "name": "Audit",
+            "streams": [
+                {
+                    "level": "debug",
+                    "type": "rotating-file",
+                    "path": "logs/audit.log",
+                    "period": "1d",
+                    "count": 2
+                }
+            ]
+        }
+    },
 ```
 
 ## Util
