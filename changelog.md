@@ -1,3 +1,5 @@
+2.0.8
+ - [BUGFIX] Logs no mongo para reconnect
 2.0.7
  - [BUGFIX] Resolvendo problema do hostname no log
 2.0.6
