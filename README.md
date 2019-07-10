@@ -26,7 +26,15 @@ SNF is a simple node-js framework that provides simple ways to use log, cache, d
 The best way to get started with SNF is using [create-snf-app](https://github.com/diogolmenezes/create-snf-app)
 
 ```shell
-npx create-snf-app my-app --disable-database --disable-redis -p 8091
+npx create-snf-app my-app -p 8091
+cd my-app
+npm start
+```
+
+With database and redis enabled:
+
+```shell
+npx create-snf-app my-app --enable-database --enable-redis -p 8091
 cd my-app
 npm start
 ```
