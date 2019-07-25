@@ -1,3 +1,5 @@
+2.0.9
+ - [FEATURE] Incluindo suporte a ignore de rotas no RequestAndResponseLogger
 2.0.8
  - [BUGFIX] Logs no mongo para reconnect
 2.0.7

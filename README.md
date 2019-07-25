@@ -171,6 +171,32 @@ SNF attach your /etc/hostname in the log, this way you can discover witch machin
 { "name": "Application", "host": "agility", "hostname": "agility", "pid": 11155, "level": 20, "pretty": "{\"obj\": {\"_obj\": undefined, \"request_id\": \"1a2dd75cd83847429c0985fa5ed337f4\"}}", "msg": "Customer Repository =>  Loading customer [diogo]", "time": "2019-03-27T19:15:17.354Z", "v": 0 }
 ```
 
+### Ignore request and response logs in some routes
+
+To ignore some route on request/response logs plugin, just add ignore attribute on configuration file.
+
+```json
+"log": {
+    "debug": false,
+    "bunyan": {
+        "name": "Application",
+        "streams": [
+            {
+                "level": "debug",
+                "stream": "process.stdout"
+            }
+        ]
+    },
+    "requestResponse": {
+        "ignore": ["/"]
+    }
+}
+```
+
+
+
+
+
 ### Logs with objects
 
 Its possible to write logs with an JSON object. SNF will stringfy and prettfy your object before write.
