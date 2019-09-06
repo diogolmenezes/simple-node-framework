@@ -1,3 +1,5 @@
+2.0.11
+ - [BUGFIX] Corrigindo bug do server close para conexões no Redis
 2.0.9
  - [FEATURE] Incluindo suporte a ignore de rotas no RequestAndResponseLogger
 2.0.8
