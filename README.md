@@ -805,7 +805,7 @@ TLS is mandatory to implement and use with this specification.
     }
 ```
 
-To protect your route with basic authorization you have to use the authorization middleware.
+To protect your route with bearer authorization you have to use the authorization middleware.
 
 ```javascript
 const { ControllerFactory } = require('simple-node-framework');
@@ -872,6 +872,65 @@ class AccountController extends BaseController {
 ```
 
 Now you can send this JWT token at authorization header to all protected api calls of this user.
+
+### Auth0 Authorization
+
+The Auth0 authentication scheme is intended primarily for server authentication using Auth0 platform using [jwks validation](https://auth0.com/docs/jwks).
+
+When you stand the Authorization header with the prefix Auth0 this middleware will validate your token.
+
+```
+Authorization: Auth0 eyJ0eXAiOiJKV1QiLCJhbGciOiJS...
+```
+
+```json
+    "authorization": {
+        "enabled": true,
+        "auth0": {
+            "domain": "https://YOUR_AUTH0_DOMAIN"
+        }
+    }
+```
+
+To protect your route with auth0 authorization you have to use the authorization middleware.
+
+```javascript
+const { ControllerFactory } = require('simple-node-framework');
+const { route, authorization } = require('simple-node-framework').Singleton;
+const server = require('../../../index.js');
+const Controller = require('./controller');
+const { full } = route.info(__filename);
+
+server.get(`${full}/protected`, [authorization.protect.bind(authorization)], ControllerFactory.build(Controller, 'get'));
+```
+
+Your controller dont need to be changed, all the work is made by the middleware.
+
+```javascript
+const { BaseController } = require('simple-node-framework').Base;
+
+class Controller extends BaseController {
+    constructor() {
+        super({
+            module: 'My Sample Controller'
+        });
+    }
+
+    get(req, res, next) {
+        res.send(200, 'Sample controller test');
+        return next();
+    }
+}
+
+module.exports = Controller;
+```
+The middleware will check the auth0 token at https://${YOUR_DOMAIN}/.well-known/jwks.json 
+
+When your API receive a request without an auth0 authorization header the middlware will return "401 Unauthorized".
+
+If the API receive an invalid token will return "403 Forbidden".
+
+If everything is ok the midleware will pass to the next() stef of the chain.
 
 ### Custom Authorization
 

@@ -1,3 +1,5 @@
+2.0.12
+ - [FEATURE] Adicionando modalidade de autorização pelo auth0
 2.0.11
  - [BUGFIX] Corrigindo bug do server close para conexões no Redis
 2.0.9
