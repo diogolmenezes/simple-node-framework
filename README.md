@@ -739,8 +739,12 @@ This scheme is not considered to be a secure method of user authentication unles
     "authorization": {
         "enabled": true,
         "basic": {
-            "username": "admin",
-            "password": "admin"
+            "users":[
+                {
+                    "username": "admin",
+                    "password": "admin"
+                }
+            ]
         }
     }
 ```
