@@ -1,3 +1,5 @@
+2.0.15
+ - [FEATURE] Incluindo o user no scope
 2.0.14
  - [FEATURE] Adicionando suporte a vários usuários no Basic Athentication. Também incluimos o usuário no log de 2 formas ( automatica e manual ) usando o bunyan fields.
 2.0.12
