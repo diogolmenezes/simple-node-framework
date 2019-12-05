@@ -1,3 +1,5 @@
+2.0.16
+ - [FEATURE] Incluindo a possibilidade de enviar uma funcao que sera executada após o listen
 2.0.15
  - [FEATURE] Incluindo o user no scope
 2.0.14

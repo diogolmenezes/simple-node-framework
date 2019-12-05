@@ -979,10 +979,10 @@ The server class is the most important class in SNF because there we configure a
 ```javascript
 const { Server } = require('simple-node-framework');
 
-class CustomServer extends Server {   
+class CustomServer extends Server {
     constructor() {
         super({
-            module: 'Custom Server'
+            module: 'SNF Custom Server'
         });
     }
 
@@ -1001,7 +1001,45 @@ class CustomServer extends Server {
     // .. you can override all other methods ...
 }
 
-module.exports = CustomServer
+const customServer = new CustomServer();
+const server = customServer.configure({
+    afterListenCallBack: () => {
+        customServer.log.debug('It works!');
+    }
+});
+
+module.exports = {
+    server,
+    baseServer: customServer.baseServer
+};
+```
+
+### Custom Server after listen callback
+
+To run custom code after server listen, you have to send an afterListenCallBack
+
+```javascript
+const { Server } = require('simple-node-framework');
+
+class CustomServer extends Server {
+    constructor() {
+        super({
+            module: 'SNF Custom Server'
+        });
+    }
+}
+
+const customServer = new CustomServer();
+const server = customServer.configure({
+    afterListenCallBack: () => {
+        customServer.log.debug('It works!');
+    }
+});
+
+module.exports = {
+    server,
+    baseServer: customServer.baseServer
+};
 ```
 
 ### Custom Server SSL HTTPS
