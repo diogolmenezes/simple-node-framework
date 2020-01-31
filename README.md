@@ -1070,8 +1070,25 @@ module.exports = {
     server,
     baseServer: customServer.baseServer
 };
-
 ```
+### Apply SSL certificate to solve UNABLE_TO_VERIFY_LEAF_SIGNATURE
+
+If you need to send an CA to soap or fetch API calls, just create at application root path an _ssl folder.
+
+Inside this folder create another folder with your cert name (my_company) ant put leaf.crt, inter.crt and root.crt files.
+
+After this you need to call ssl.applyCerts on your index.js file. This method will import all your certfiles to global request agent.
+
+```javascript
+// index.js
+const { ssl } = require('simple-node-framework').Singleton;
+ssl.applyCerts();
+```
+
+To get the CRT files you needs to:
+
+1 - Download the 3 ".cer" certificates on the website leaf, inter and root.
+2 - Convert CER files in CRT files openssl x509 -inform der -in leaf.cer -out leaf.crt
 
 ## Route
 

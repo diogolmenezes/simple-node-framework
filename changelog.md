@@ -1,3 +1,5 @@
+2.0.20
+ - [FEATURE] Incluindo suporte a inclusão de certidficados para contornar o problema de UNABLE_TO_VERIFY_LEAF_SIGNATURE
 2.0.16
  - [FEATURE] Incluindo a possibilidade de enviar uma funcao que sera executada após o listen
 2.0.15

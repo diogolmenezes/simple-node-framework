@@ -19,6 +19,7 @@ const Queue = require('./lib/queue');
 const Route = require('./lib/route');
 const Server = require('./lib/server');
 const Session = require('./lib/session');
+const ssl = require('./lib/ssl');
 const TestHelper = require('./lib/test');
 
 module.exports = {
@@ -50,7 +51,8 @@ module.exports = {
         log: Log.instance,
         redis: Redis.instance,
         queue: Queue.instance,
-        route: Route.instance
+        route: Route.instance,
+        ssl
     },
     TestHelper
 };
