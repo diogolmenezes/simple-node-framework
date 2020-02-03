@@ -1,3 +1,5 @@
+2.0.21
+ - [FEATURE] Adicionando custom errors na documentacao
 2.0.20
  - [FEATURE] Incluindo suporte a inclusão de certidficados para contornar o problema de UNABLE_TO_VERIFY_LEAF_SIGNATURE
 2.0.16

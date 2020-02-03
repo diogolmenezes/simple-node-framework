@@ -1268,6 +1268,58 @@ configuration at your config file.
 
 ## Errors
 
+### Custom Errors
+
+First you have to create your custom error class and override defineCustomErrors method.
+
+```javascript
+// custom-errors.js
+const { ErrorHandler } = require('simple-node-framework');
+
+class CustomErrors extends ErrorHandler {
+    constructor() {
+        super({
+            module: 'Custom Errors'
+        });
+    }
+
+    defineCustomErrors() {
+        super.defineCustomErrors();
+        this.restifyErrors.SampleError1 = this.restifyErrors.makeConstructor('SampleError1', {
+            statusCode: 512,
+            failureType: 'motion'
+        });
+
+        this.restifyErrors.SampleError2 = this.restifyErrors.makeConstructor('SampleError2', {
+            statusCode: 504,
+            failureType: 'motion'
+        });
+    }
+}
+
+module.exports = new CustomErrors();
+```
+Than you can use you sampleError:
+
+```javascript
+    const customErrors = require('./custom-errors');
+
+    // you can use your custom error on next
+    myAction(req, res, next) {
+        return next(customErrors.throw('This is a sample error 1', 'SampleError1'));
+    }
+
+    // or you can throw the custom error
+    myAction2(req, res, next) {
+        try {
+            throw customErrors.throw('This is a sample error 2', 'SampleError2');
+        } catch (error) {
+            this.log.error('There was an error on load ...', error);
+            return next(error);
+        }
+    }
+```
+
 ## Test
 
 SNF provides some test facilities especially if you are using SNF by an [create-snf-app](https://github.com/diogolmenezes/create-snf-app) application.
