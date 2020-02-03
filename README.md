@@ -457,6 +457,29 @@ module.exports = PeopleRepository;
 
 ```
 
+### OnDatabaseConnect
+
+If you need execute an action after database has connected, you should use the OnDatabaseConnect event.
+
+```javascript
+// index.js
+const { database } = require('simple-node-framework').Singleton;
+
+database.onMongoConnected = () => {
+    // your code...
+}
+
+database.onOracleConnected = () => {
+   // your code... 
+}
+
+database.onSqlServerConnected = () => {
+   // your code... 
+}
+
+```
+
+
 ## Redis
 
 SNF support has a redis handler to simplify connection and use.
