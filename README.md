@@ -476,9 +476,7 @@ database.onOracleConnected = () => {
 database.onSqlServerConnected = () => {
    // your code... 
 }
-
 ```
-
 
 ## Redis
 
