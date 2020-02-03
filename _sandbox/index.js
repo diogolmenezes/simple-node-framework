@@ -1,7 +1,7 @@
-const { Server } = require('simple-node-framework');
 
 // To start default server do this:
-module.exports = new Server().configure({ port: 8081 });
+// const { Server } = require('simple-node-framework');
+// module.exports = new Server().configure({ port: 8081 });
 
 // To send a custom listenCallback or port do this:
 // const server = new Server();
@@ -11,4 +11,4 @@ module.exports = new Server().configure({ port: 8081 });
 // });
 
 // To use a custom server do this:
-// module.exports = require('./api/config/custom-server');
+module.exports = require('./api/config/custom-server').server;

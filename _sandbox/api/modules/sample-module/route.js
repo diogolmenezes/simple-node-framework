@@ -12,3 +12,6 @@ server.get(`${full}/`, [Cache.loadResponse], ControllerFactory.build(Controller,
 server.get(`${full}/protected`, [authorization.protect.bind(authorization), Cache.loadResponse], ControllerFactory.build(Controller, 'get'));
 
 server.get(`${full}/session`, ControllerFactory.build(Controller, 'session'));
+
+// sample of custom error
+server.get(`${full}/custom-error`, ControllerFactory.build(Controller, 'customError'));

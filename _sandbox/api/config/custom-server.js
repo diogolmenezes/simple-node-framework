@@ -1,6 +1,6 @@
 const { Server } = require('simple-node-framework');
 
-class CustomServer extends Server {   
+class CustomServer extends Server {
     constructor() {
         super({
             module: 'Custom Server'
@@ -19,5 +19,14 @@ class CustomServer extends Server {
         this.log.debug('This is only another custom messagem from your custom server :)');
     }
 }
+const customServer = new CustomServer();
+const server = customServer.configure({
+    afterListenCallBack: () => {
+        customServer.log.debug('It works!');
+    }
+});
 
-module.exports = new CustomServer().start({ port: 8081 });
+module.exports = {
+    server,
+    baseServer: customServer.baseServer
+};

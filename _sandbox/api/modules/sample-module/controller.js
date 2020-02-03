@@ -1,4 +1,5 @@
 const { BaseController } = require('simple-node-framework').Base;
+const customErrors = require('../../config/custom-errors');
 
 class Controller extends BaseController {
     constructor() {
@@ -23,6 +24,16 @@ class Controller extends BaseController {
         console.log('SESSION DATA =>', req.session.data);
         res.send(200, 'Sample session controller test');
         return next();
+    }
+
+    // custom-error sample
+    customError(req, res, next) {
+        try {
+            throw customErrors.throw('This is a sample error', 'SampleError');
+        } catch (error) {
+            this.log.error('Unexpected error on load', error);
+            return next(error);
+        }
     }
 }
 
