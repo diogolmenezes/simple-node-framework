@@ -11,6 +11,11 @@ class Controller extends BaseController {
     get(req, res, next) {
         super.activateRequestLog(req);
         this.log.debug('This is a sample log');
+        try {
+            this.auditor.audit('SOME_USER', 'AppServer', 'Shutdown', 'Production-3 Instance', 'ec2-255-255-255-255', 'Terminated from web console.');
+        } catch (error) {
+            this.log.debug('Vamos');
+        }
         res.send(200, 'Sample controller test');
         req.cache.saveResponse(200, 'Sample controller test', res.headers, req);
         return next();

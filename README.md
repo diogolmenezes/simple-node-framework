@@ -1240,29 +1240,24 @@ class PeopleService extends BaseService {
 
 module.exports = new PeopleService();
 ```
-## Audit
+## Auditor
 
-The audit module uses restify [audit logger](http://restify.com/docs/plugins-api/#auditlogger). To use, include this
-configuration at your config file.
+The auditor module is used to log features in the project. To use, include this configuration at your config file.
 
 ```json
     "audit": {
-        "enabled": true,
-        "printLog": true,
-        "bunyan": {
-            "name": "Audit",
-            "streams": [
-                {
-                    "level": "debug",
-                    "type": "rotating-file",
-                    "path": "logs/audit.log",
-                    "period": "1d",
-                    "count": 2
-                }
-            ]
-        }
+            "enabled": true
     },
 ```
+
+To audit, just call the method *audit*. This method will create the collection **audit** (if not exist) and save the record.
+
+```javascript
+auditor.audit('SOME_USER', 'AppServer', 'Shutdown', 'Production-3 Instance', 'ec2-255-255-255-255', 'Terminated from web console.', {});
+```
+
+The method's arguments contract are *actor, origin, action, label, object, description and metadata*. All that are optional because function call need to be passive (not affect the application flow).
+
 
 ## Util
 
