@@ -1,7 +1,4 @@
-<<<<<<< Updated upstream
-=======
 const Auditor = require('./lib/auditor');
->>>>>>> Stashed changes
 const Authorization = require('./lib/authorization');
 const BaseClass = require('./lib/base/base');
 const BaseController = require('./lib/base/base-controller');
