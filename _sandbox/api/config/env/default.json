@@ -66,20 +66,7 @@
         }
     },
     "audit": {
-        "enabled": true,
-        "printLog": true,
-        "bunyan": {
-            "name": "Audit",
-            "streams": [
-                {
-                    "level": "debug",
-                    "type": "rotating-file",
-                    "path": "logs/audit.log",
-                    "period": "1d",
-                    "count": 2
-                }
-            ]
-        }
+        "enabled": false
     },
     "origin": {
             "ignoreExact": [

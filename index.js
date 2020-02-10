@@ -1,3 +1,7 @@
+<<<<<<< Updated upstream
+=======
+const Auditor = require('./lib/auditor');
+>>>>>>> Stashed changes
 const Authorization = require('./lib/authorization');
 const BaseClass = require('./lib/base/base');
 const BaseController = require('./lib/base/base-controller');
@@ -23,6 +27,7 @@ const ssl = require('./lib/ssl');
 const TestHelper = require('./lib/test');
 
 module.exports = {
+    Auditor: Auditor.class,
     Authorization: Authorization.class,
     Base: {
         BaseClass,
@@ -44,6 +49,7 @@ module.exports = {
     Server,
     Session,
     Singleton: {
+        auditor: Auditor.instance,
         authorization: Authorization.instance,
         config,
         database: Database.instance,
