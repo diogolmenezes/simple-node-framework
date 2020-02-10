@@ -1,3 +1,5 @@
+2.0.23
+ - [FEATURE] Incluindo auditoria
 2.0.21
  - [FEATURE] Adicionando custom errors na documentacao
 2.0.20
