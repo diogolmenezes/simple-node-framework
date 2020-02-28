@@ -1,11 +1,13 @@
 const { BaseController } = require('simple-node-framework').Base;
 const customErrors = require('../../config/custom-errors');
+const Service = require('./service/service');
 
 class Controller extends BaseController {
     constructor() {
         super({
             module: 'My Sample Controller'
         });
+        this.service = new Service();
     }
 
     get(req, res, next) {
@@ -34,9 +36,11 @@ class Controller extends BaseController {
     // custom-error sample
     customError(req, res, next) {
         try {
-            throw customErrors.throw('This is a sample error', 'SampleError');
+            this.service.testeErro();
         } catch (error) {
-            this.log.error('Unexpected error on load', error);
+            if (error.code !== 'AndersonError') {
+                this.log.error('Unexpected error on load', error);
+            }
             return next(error);
         }
     }
