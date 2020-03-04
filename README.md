@@ -1108,8 +1108,8 @@ ssl.applyCerts();
 
 To get the CRT files you needs to:
 
-1 - Download the 3 ".cer" certificates on the website leaf, inter and root.
-2 - Convert CER files in CRT files openssl x509 -inform der -in leaf.cer -out leaf.crt
+1. Download the 3 ".cer" certificates on the website leaf, inter and root.
+2. Convert CER files in CRT files openssl x509 -inform der -in leaf.cer -out leaf.crt
 
 ## Route
 
