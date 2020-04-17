@@ -1,3 +1,5 @@
+2.0.26
+ - [FEATURE] Melhorando o metodo de inclusao de ssl
 2.0.23
  - [FEATURE] Incluindo auditoria
 2.0.21
