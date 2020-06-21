@@ -1,3 +1,5 @@
+2.0.29
+ - [FEATURE] Removendo a dependencia do oracledb e mssql que agora precisam ser incluidas manualmente
 2.0.26
  - [FEATURE] Melhorando o metodo de inclusao de ssl
 2.0.23

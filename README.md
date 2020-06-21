@@ -336,7 +336,9 @@ this.model.findOne({ name });
 
 ### Sql Server
 
-To enable sqlserver just add sqlserver configuration to config db node.
+To enable sqlserver just add sqlserver configuration to config db node nd install mssql package dependency.
+
+`npm i mssql`
 
 ```json
     "db": {
@@ -391,7 +393,9 @@ module.exports = PeopleRepository;
 
 ### Oracle
 
-To enable oracle add oracle configuration to config db node.
+To enable oracle add oracle configuration to config db node and install oracledb package dependency.
+
+`npm i oracledb`
 
 ```json
     "db": {
