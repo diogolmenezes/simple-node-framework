@@ -1,3 +1,5 @@
+2.0.30
+ - [FEATURE] Melhorando o log do response, colocando o status e o request id como campos buscaveis
 2.0.29
  - [FEATURE] Removendo a dependencia do oracledb e mssql que agora precisam ser incluidas manualmente
 2.0.26
