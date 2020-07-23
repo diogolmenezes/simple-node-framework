@@ -16,7 +16,7 @@ SNF is a simple node-js framework that provides simple ways to use log, cache, d
 -   [Plugins](#plugins)
 -   [Config](#config)
 -   [Request Scope](#request-scope)
--   [Audit](#audit)
+-   [Auditor](#auditor)
 -   [Util](#util)
 -   [Erros](#erros)
 -   [Test](#test)
@@ -1253,6 +1253,8 @@ The auditor module is used to log features in the project. To use, include this 
             "enabled": true
     },
 ```
+
+Make sure that you have a mongo connection established before audit ([Database](#database)).
 
 To audit, just call the method *audit*. This method will create the collection **audit** (if not exist) and save the record.
 
