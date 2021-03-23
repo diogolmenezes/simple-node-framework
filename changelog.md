@@ -1,3 +1,5 @@
+2.0.32
+ - [FEATURE] Adicionando o conceito de arquivo `.snf` e a variável "dir" para alterar a estrutura de diretórios padrão no framework
 2.0.31
  - [FEATURE] Incluindo suporte a variaveis de ambiente
 2.0.30
