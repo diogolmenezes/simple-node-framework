@@ -1324,3 +1324,24 @@ Than you can use you sampleError:
 ## Test
 
 SNF provides some test facilities especially if you are using SNF by an [create-snf-app](https://github.com/diogolmenezes/create-snf-app) application.
+
+## .snf file
+
+The configuration file with the lesser precedence importance is the `.snf` file. It must be created in the root of the parent project and might contain any data applicable in the environment files.
+
+The data written in the `.snf` file are overwritten by the data in the environment files, but are read first.
+
+## SNF with Typescript
+
+Apart from installing the Typescript dependencies, for exemple, `ts-node` and `typescript` libraries, 
+you can use Typescript in the parent project with very few configuration.
+
+If you are going to transpile all TS files in a directory other than the root folder, you must create a `.snf` file and add a `dir` property pointing to the correct location. 
+
+For example, if the files are transpiled to `root/dist/`, then create the `.snf` file as following:
+
+```
+{
+    "dir": "dist/"
+}
+```
