@@ -1,3 +1,5 @@
+2.1.2
+ - [BUGFIX] Removendo pacotes nao utilizados e atualizando bibliotecas com bugs de seguranca 
 2.1.0
  - [FEATURE] Adicionando o conceito de arquivo `.snf` e a variável "dir" para alterar a estrutura de diretórios padrão no framework
 2.0.31
