@@ -1,4 +1,6 @@
 2.1.3
+ - [BUGFIX] Travando a versao do restify enquando nao resolvem o problema da nova versao deles
+2.1.3
  - [FEATURE] Incluindo a opcao de ignorar todas as rotas no request response logger botando *
 2.1.2
  - [BUGFIX] Removendo pacotes nao utilizados e atualizando bibliotecas com bugs de seguranca 
