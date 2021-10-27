@@ -1,4 +1,6 @@
-2.1.3
+2.1.5
+ - Corrigindo security issues npm
+2.1.4
  - [BUGFIX] Travando a versao do restify enquando nao resolvem o problema da nova versao deles
 2.1.3
  - [FEATURE] Incluindo a opcao de ignorar todas as rotas no request response logger botando *

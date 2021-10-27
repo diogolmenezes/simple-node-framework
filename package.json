@@ -1,6 +1,6 @@
 {
     "name": "simple-node-framework",
-    "version": "2.1.4",
+    "version": "2.1.5",
     "keywords": [
         "basic",
         "simple",
@@ -38,7 +38,7 @@
     },
     "license": "ISC",
     "devDependencies": {
-        "eslint": "^5.15.3",
+        "eslint": "^8.1.0",
         "eslint-config-airbnb-base": "^13.1.0",
         "eslint-plugin-chai-friendly": "^0.4.1",
         "eslint-plugin-import": "^2.16.0",
@@ -54,7 +54,7 @@
         "jwks-rsa": "^1.6.2",
         "mongoose": "^5.4.20",
         "node-fetch": "^2.3.0",
-        "pretty-format": "^24.5.0",
+        "pretty-format": "^27.3.1",
         "restify": "8.5.1",
         "restify-cors-middleware": "^1.1.1",
         "restify-errors": "^7.0.0",
