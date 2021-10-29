@@ -1,5 +1,7 @@
+2.1.6
+ - [BUGFIX] Corrigindo problema com o pretty format
 2.1.5
- - Corrigindo security issues npm
+ - [BUGFIX] Corrigindo security issues npm
 2.1.4
  - [BUGFIX] Travando a versao do restify enquando nao resolvem o problema da nova versao deles
 2.1.3
