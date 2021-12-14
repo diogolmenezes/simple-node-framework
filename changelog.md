@@ -1,3 +1,5 @@
+2.1.8
+ - [FEAT] Adicionado importação de rotas declaradas em arquivos ts 
 2.1.7
  - [FEAT] Essa implementação tem como propósito evitar de ter que efetuar o build na aplicação antes da execução de qualquer teste. Atualmente o build é necessário quando a aplicação está configurada com Typescript, e possui o arquivo '.snf'.
 2.1.6
