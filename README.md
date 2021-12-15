@@ -11,6 +11,7 @@ SNF is a simple node-js framework that provides simple ways to use log, cache, d
 -   [Cache](#cache)
 -   [Session](#session)
 -   [Authorization](#authorization)
+-   [Security](#security)
 -   [Server](#server)
 -   [Route](#route)
 -   [Plugins](#plugins)
@@ -847,7 +848,8 @@ You have to turn on basicDatabase method in the configuration file:
         "enabled": true,
         "basicDatabase": {
             "connectionName": "application",
-            "collectionName": "snf-authorization"
+            "collectionName": "snf-authorization",
+            "useEncryption": true
         }
     },
 ```
@@ -865,6 +867,8 @@ At mongodb the snf-authorization collection must have this schema:
 ```
 
 If you have modules with different users in your application, you can use x-authorization-module header to identify that you want authorize with an specific module credencial thah have to match with module column stored at snf-authorization collection.
+
+If you want to use ecrypted passwords at database, turn on useEncryption flag in configuration and check if your SNF_CRYPTO_KEY environment variable is created and has your security token.
 
 To protect your route with basic authorization you have to use the authorization middleware.
 
@@ -1081,6 +1085,22 @@ class CustomAuthorization extends Authorization {
 }
 
 module.exports = new CustomAuthorization();
+```
+
+## Security
+
+The security class has encrypt and decrypt methods to secure data.
+
+To use this feature you must have SNF_CRYPTO_KEY environment variable with you crypto key 
+
+```javascript
+const { Security } = require('simple-node-framework');
+
+...
+    const security  = new Security();
+    const encrypted = security.encrypt('text');
+    const plain     = security.decrypt(encrypted);
+...
 ```
 
 ## Server

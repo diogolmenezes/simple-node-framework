@@ -18,6 +18,7 @@ const ProcessTimer = require('./lib/util/process-timer');
 const Redis = require('./lib/redis');
 const Queue = require('./lib/queue');
 const Route = require('./lib/route');
+const Security = require('./lib/security');
 const Server = require('./lib/server');
 const Session = require('./lib/session');
 const ssl = require('./lib/ssl');
@@ -43,6 +44,7 @@ module.exports = {
     Loggable,
     ProcessTimer,
     Route: Route.class,
+    Security,
     Server,
     Session,
     Singleton: {
