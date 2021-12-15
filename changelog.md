@@ -1,3 +1,5 @@
+3.0.1
+ - [FEAT] Adding basic authorization on database feature
 3.0.0
  - [FEAT] removing mongoose dependence
 2.1.10

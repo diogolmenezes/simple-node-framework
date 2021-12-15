@@ -834,7 +834,76 @@ Now, when your API receive a request without an basic authorization header the m
 
 If the API receive an invalid user and password will return "403 Forbidden".
 
-If everything is ok the midleware will pass to the next() stef of the chain.
+If everything is ok the midleware will pass to the next() step of the chain.
+
+### Basic Authorization on database
+
+The Basic Authorization on database, will check the credentials on mongo database collection
+
+You have to turn on basicDatabase method in the configuration file:
+
+```json
+    "authorization": {
+        "enabled": true,
+        "basicDatabase": {
+            "connectionName": "application",
+            "collectionName": "snf-authorization"
+        }
+    },
+```
+
+ConnectionName is the mongodb connection name (application by default) and collectionName is the name of the collection that will store the users (snf-authorization by default)
+
+At mongodb the snf-authorization collection must have this schema:
+
+```json
+{
+    "user" : "xxx",
+    "password" : "xxxxx",
+    "module" : "yyy" // not required
+}
+```
+
+If you have modules with different users in your application, you can use x-authorization-module header to identify that you want authorize with an specific module credencial thah have to match with module column stored at snf-authorization collection.
+
+To protect your route with basic authorization you have to use the authorization middleware.
+
+```javascript
+const { ControllerFactory } = require('simple-node-framework');
+const { route, authorization } = require('simple-node-framework').Singleton;
+const server = require('../../../index.js');
+const Controller = require('./controller');
+const { full } = route.info(__filename);
+
+server.get(`${full}/protected`, [authorization.protect.bind(authorization)], ControllerFactory.build(Controller, 'get'));
+```
+
+Your controller dont need to be changed, all the work is made by the middleware.
+
+```javascript
+const { BaseController } = require('simple-node-framework').Base;
+
+class Controller extends BaseController {
+    constructor() {
+        super({
+            module: 'My Sample Controller'
+        });
+    }
+
+    get(req, res, next) {
+        res.send(200, 'Sample controller test');
+        return next();
+    }
+}
+
+module.exports = Controller;
+```
+
+Now, when your API receive a request without an basic authorization header the middlware will return "401 Unauthorized".
+
+If the API receive an invalid user and password will return "403 Forbidden".
+
+If everything is ok the midleware will pass to the next() step of the chain.
 
 ### Bearer Authorization
 
@@ -894,7 +963,7 @@ Now, when your API receive a request without an baerer authorization header the 
 
 If the API receive an invalid token will return "403 Forbidden".
 
-If everything is ok the midleware will pass to the next() stef of the chain.
+If everything is ok the midleware will pass to the next() step of the chain.
 
 To generate a valid JWT token, you can use the createJWT helper method.
 
@@ -982,7 +1051,7 @@ When your API receive a request without an auth0 authorization header the middlw
 
 If the API receive an invalid token will return "403 Forbidden".
 
-If everything is ok the midleware will pass to the next() stef of the chain.
+If everything is ok the midleware will pass to the next() step of the chain.
 
 ### Custom Authorization
 
