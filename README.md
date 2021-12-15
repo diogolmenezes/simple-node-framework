@@ -847,28 +847,48 @@ You have to turn on basicDatabase method in the configuration file:
     "authorization": {
         "enabled": true,
         "basicDatabase": {
-            "connectionName": "application",
-            "collectionName": "snf-authorization",
-            "useEncryption": true
+            "connectionName": "application", // ConnectionName is the mongodb connection name (application by default)
         }
     },
 ```
-
-ConnectionName is the mongodb connection name (application by default) and collectionName is the name of the collection that will store the users (snf-authorization by default)
 
 At mongodb the snf-authorization collection must have this schema:
 
 ```json
 {
     "user" : "xxx",
-    "password" : "xxxxx",
+    "encryptedPassword" : "xxxxx",
     "module" : "yyy" // not required
 }
 ```
 
 If you have modules with different users in your application, you can use x-authorization-module header to identify that you want authorize with an specific module credencial thah have to match with module column stored at snf-authorization collection.
 
-If you want to use ecrypted passwords at database, turn on useEncryption flag in configuration and check if your SNF_CRYPTO_KEY environment variable is created and has your security token.
+This feature use ecrypted passwords at database, so you have to check if your SNF_CRYPTO_KEY environment variable is created and has your security token with 32 characters.
+
+To encrypt passwords to store at snf-authorization collection you have to encrypt data using snf security class, so see this sample:
+
+```javascript
+const { Security } = require('simple-node-framework');
+(async () => {
+    const sec = new Security();
+    console.log(await sec.encrypt(value));
+    // this will generate this output:
+    // {
+    //     "iv" : "43bcbc882307239047763718854739a0",
+    //     "content" : "5b80e4b64ff02a1b0cdcd756"
+    // }
+    // and you will have to store the output in encryptedPassword field at snf-authorization collection at database, like this:
+    // {
+    //     "user" : "xxxx",
+    //     "encryptedPassword" : {
+    //         "iv" : "43bcbc882307239047763718854739a0",
+    //         "content" : "5b80e4b64ff02a1b0cdcd756"
+    //     },
+    //     "module" : "xxxx"
+    // }
+})();
+```
 
 To protect your route with basic authorization you have to use the authorization middleware.
 
@@ -1091,7 +1111,7 @@ module.exports = new CustomAuthorization();
 
 The security class has encrypt and decrypt methods to secure data.
 
-To use this feature you must have SNF_CRYPTO_KEY environment variable with you crypto key 
+To use this feature you must have SNF_CRYPTO_KEY environment variable with you crypto key with 32 characters
 
 ```javascript
 const { Security } = require('simple-node-framework');

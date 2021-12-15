@@ -1,3 +1,5 @@
+3.0.3
+ - [FEAT] adding suport to encryption at basic authorization database
 3.0.2
  - [FEAT] adding crypt and decrypt methods
 3.0.1
