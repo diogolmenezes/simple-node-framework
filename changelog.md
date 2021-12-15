@@ -1,3 +1,7 @@
+3.0.0
+ - [FEAT] removing mongoose dependence
+2.1.10
+ - [FEAT] rollback  mongoose dependence
 2.1.9
  - [FEAT] removing mongoose dependence
 2.1.8
