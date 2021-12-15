@@ -1,6 +1,6 @@
 {
     "name": "simple-node-framework",
-    "version": "2.1.8",
+    "version": "2.1.9",
     "keywords": [
         "basic",
         "simple",
@@ -52,7 +52,6 @@
         "ioredis": "^4.9.0",
         "jsonwebtoken": "^8.5.1",
         "jwks-rsa": "^1.6.2",
-        "mongoose": "^5.13.12",
         "node-fetch": "^2.3.0",
         "pretty-format": "^27.3.1",
         "restify": "8.5.1",

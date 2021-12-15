@@ -304,7 +304,9 @@ You can disable database handler by removing the "db" node at configuration file
 
 ### MongoDB
 
-To enable mongodb just add mongodb configuration to config db node.
+To enable mongodb just add mongodb configuration to config db node and install mongoose package dependency..
+
+`npm i mongoose`
 
 ```json
     "db": {

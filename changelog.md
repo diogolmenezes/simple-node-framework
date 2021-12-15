@@ -1,3 +1,5 @@
+2.1.9
+ - [FEAT] removing mongoose dependence
 2.1.8
  - [FEAT] Adicionado importação de rotas declaradas em arquivos ts 
 2.1.7
