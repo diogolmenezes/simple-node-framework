@@ -1,3 +1,5 @@
+3.0.4
+ - [BUGFIX] SNF_CRYPTO_KEY
 3.0.3
  - [FEAT] adding suport to encryption at basic authorization database
 3.0.2
