@@ -1,3 +1,5 @@
+3.0.7
+ - [FEAT] Repassando as configuacoes da configuracao para o SQL Server
 3.0.5
  - [BUGFIX] SNF_CRYPTO_KEY
 3.0.4
