@@ -1,6 +1,6 @@
 {
     "name": "simple-node-framework",
-    "version": "3.0.7",
+    "version": "4.0.0",
     "keywords": [
         "basic",
         "simple",
@@ -55,8 +55,8 @@
         "jwks-rsa": "^1.6.2",
         "node-fetch": "^2.3.0",
         "pretty-format": "^27.3.1",
-        "restify": "8.5.1",
-        "restify-cors-middleware": "^1.1.1",
+        "restify": "^8.6.1",
+        "restify-cors-middleware2": "^2.1.2",
         "restify-errors": "^7.0.0",
         "soap": "^0.39.0",
         "truncate": "^2.0.1",

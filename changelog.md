@@ -1,3 +1,5 @@
+4.0.0
+ - [FEAT] Atualizando a versao do restify e do cors
 3.0.7
  - [FEAT] Repassando as configuacoes da configuracao para o SQL Server
 3.0.5
