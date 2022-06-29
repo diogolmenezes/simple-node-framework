@@ -1,3 +1,5 @@
+4.0.1
+ - [FEAT] Adding username on requestlog
 4.0.0
  - [FEAT] Atualizando a versao do restify e do cors
 3.0.7
