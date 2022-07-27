@@ -1,3 +1,5 @@
+4.0.3
+ - [FEAT] Adding requestPath on requestlog
 4.0.2
  - [FEAT] Adding username on requestlog
 4.0.1
