@@ -862,7 +862,7 @@ At mongodb the snf-authorization collection must have this schema:
 }
 ```
 
-If you have modules with different users in your application, you can use x-authorization-module header to identify that you want authorize with an specific module credencial thah have to match with module column stored at snf-authorization collection.
+If you have modules with different users in your application, you can use SNF_CRYPTO_MODULE environment variable identify that you want authorize with an specific module credencial thah have to match with module column stored at snf-authorization collection.
 
 This feature use ecrypted passwords at database, so you have to check if your SNF_CRYPTO_KEY environment variable is created and has your security token with 32 characters.
 
@@ -888,6 +888,23 @@ const { Security } = require('simple-node-framework');
     //     "module" : "xxxx"
     // }
 })();
+```
+
+Or you can user the createUser method of authorization class like this sample:
+
+```javascript
+//create this file at root of your app: create-user.js
+
+// use this to import the SNF_CRYPTO_KEY variable 
+require('dotenv').config({ path: `./.env.${process.env.NODE_ENV}` });
+
+// prompting user to put user data
+const { authorization } = require('simple-node-framework').Singleton
+const user = process.argv[2]
+const password = process.argv[3]
+
+// creating user
+authorization.createUser(user, password, 'api-canais')
 ```
 
 To protect your route with basic authorization you have to use the authorization middleware.
