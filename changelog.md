@@ -1,3 +1,5 @@
+4.0.6
+ - [BUGFIX] Bugfix on new way to add snfUsers
 4.0.5
  - [FEAT] Improvements on new way to add snfUsers
 4.0.4
