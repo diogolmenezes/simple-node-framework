@@ -1,3 +1,5 @@
+4.0.5
+ - [FEAT] Improvements on new way to add snfUsers
 4.0.4
  - [FEAT] New way to add snfUsers
 4.0.3

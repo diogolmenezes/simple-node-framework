@@ -902,9 +902,10 @@ require('dotenv').config({ path: `./.env.${process.env.NODE_ENV}` });
 const { authorization } = require('simple-node-framework').Singleton
 const user = process.argv[2]
 const password = process.argv[3]
+const module = 'my-module' // only if you have a module
 
 // creating user
-authorization.createUser(user, password, 'api-canais')
+authorization.createUser(user, password, module)
 
 // RESULT: Now you can do NODE_ENV=development node create-user.js youruser yourpassword
 ```
