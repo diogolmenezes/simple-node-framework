@@ -905,6 +905,8 @@ const password = process.argv[3]
 
 // creating user
 authorization.createUser(user, password, 'api-canais')
+
+// RESULT: Now you can do node create-user.js youruser yourpassword
 ```
 
 To protect your route with basic authorization you have to use the authorization middleware.
