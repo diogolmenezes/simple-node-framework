@@ -1,3 +1,5 @@
+4.0.4
+ - [FEAT] New way to add snfUsers
 4.0.3
  - [FEAT] Adding requestPath on requestlog
 4.0.2
