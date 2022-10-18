@@ -13,11 +13,6 @@ class CustomErrors extends ErrorHandler {
             statusCode: 512,
             failureType: 'motion'
         });
-
-        this.restifyErrors.AndersonError = this.restifyErrors.makeConstructor('AndersonError', {
-            statusCode: 503,
-            failureType: 'motion'
-        });
     }
 }
 
