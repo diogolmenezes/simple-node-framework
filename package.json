@@ -1,6 +1,6 @@
 {
     "name": "simple-node-framework",
-    "version": "5.0.2-beta",
+    "version": "5.0.3-beta",
     "keywords": [
         "basic",
         "simple",
@@ -56,6 +56,7 @@
         "jsonwebtoken": "^8.5.1",
         "jwks-rsa": "^1.6.2",
         "node-fetch": "^2.3.0",
+        "object-hash": "^3.0.0",
         "pretty-format": "^27.3.1",
         "restify-errors": "^8.0.2",
         "soap": "^0.39.0",
