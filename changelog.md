@@ -1,3 +1,5 @@
+5.0.5-beta
+    [NODE 18]
 4.0.6
  - [BUGFIX] Bugfix on new way to add snfUsers
 4.0.5
