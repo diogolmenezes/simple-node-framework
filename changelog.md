@@ -1,3 +1,5 @@
+5.0.6-beta
+  - [BUGFIX] Adding _scope property to use scope on server.use middleware
 5.0.5-beta
     [NODE 18]
 4.0.6
