@@ -1,3 +1,5 @@
+4.0.7
+ - [BUGFIX] Adding _scope property do use scope on server.use middleware
 4.0.6
  - [BUGFIX] Bugfix on new way to add snfUsers
 4.0.5
