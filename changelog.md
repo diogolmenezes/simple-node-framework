@@ -1,3 +1,7 @@
+6.0.1
+  - [CHORE] Exporting baseserver
+6.0.0
+  - [BUGFIX] Fix server names
 5.0.6-beta
   - [BUGFIX] Adding _scope property to use scope on server.use middleware
 5.0.5-beta
