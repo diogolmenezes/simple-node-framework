@@ -1,3 +1,5 @@
+6.0.3
+  - [CHORE] updating jwt lib
 6.0.2
   - [CHORE] Fix jwt bug
 6.0.1
