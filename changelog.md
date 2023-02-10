@@ -1,3 +1,5 @@
+6.0.4
+  - [FEAT] loging cache hits when this.config.cache.logHits is enabled
 6.0.3
   - [CHORE] updating jwt lib
 6.0.2
