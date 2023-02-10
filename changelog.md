@@ -1,3 +1,5 @@
+6.0.7
+  - [FEAT] Dont log response time for urls in ignore list
 6.0.6
   - [FEAT] Adding headerCallback to response log
 6.0.5
