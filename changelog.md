@@ -1,3 +1,5 @@
+6.0.6
+  - [FEAT] Adding headerCallback to response log
 6.0.5
   - [FEAT] Adding automatic timer for response logs and bodyCallback to response log
 6.0.4
