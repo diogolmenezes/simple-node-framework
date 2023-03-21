@@ -123,6 +123,7 @@ If you turn of *debug* SNF will not output logs at your console, by default we t
 ```json
 "log": {
     "debug": true,
+    "requestIdentifier": "requestKey",
     "bunyan": {
         "name": "Application",
         "streams": [
@@ -175,6 +176,14 @@ All the logs will be automaticaly prefixed with module name, so if you write a l
 DEBUG My Sample Controller =>  Loading customer [diogo]
 DEBUG Customer Service =>  Loading customer [diogo]
 DEBUG Customer Repository =>  Loading customer [diogo]
+```
+
+### Define Request Identifier
+
+"request_id" is default identifier but you can define a custom request identifier like bellow.
+
+``` json
+"requestIdentifier": "requestKey"
 ```
 
 ### Request id in the log
