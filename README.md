@@ -185,6 +185,8 @@ SNF log will automaticaly attach your request-id in the log if you call *super.a
 { "name": "Application", "host": "agility", "hostname": "agility", "pid": 11155, "level": 20, "pretty": "{\"obj\": {\"_obj\": undefined, \"request_id\": \"1a2dd75cd83847429c0985fa5ed337f4\"}}", "msg": "Customer Repository =>  Loading customer [diogo]", "time": "2019-03-27T19:15:17.354Z", "v": 0 }
 ```
 
+*By the way if you send the parameter request_id in the header of the requisition, SWF will use this value as request id.*
+
 ### Hostname in the log
 
 SNF attach your /etc/hostname in the log, this way you can discover witch machine is writing the logs

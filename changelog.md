@@ -1,3 +1,5 @@
+6.0.8
+  - [FEAT] Adding the possibility to send the request_id as a parameter 
 6.0.7
   - [FEAT] Dont log response time for urls in ignore list
 6.0.6
