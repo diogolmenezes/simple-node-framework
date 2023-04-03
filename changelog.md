@@ -1,3 +1,5 @@
+4.0.9
+ - [FEAT] Adding the possibility to send the request_id as a parameter
 4.0.7
  - [BUGFIX] Adding _scope property do use scope on server.use middleware
 4.0.6
