@@ -1,3 +1,5 @@
+6.0.9
+  - [CHORE] Updating soap lib
 6.0.8
   - [FEAT] Adding the possibility to send the request_id as a parameter 
 6.0.7

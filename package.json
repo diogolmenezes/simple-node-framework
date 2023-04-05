@@ -1,6 +1,6 @@
 {
     "name": "simple-node-framework",
-    "version": "6.0.8",
+    "version": "6.0.9",
     "keywords": [
         "basic",
         "simple",
@@ -59,7 +59,7 @@
         "object-hash": "^3.0.0",
         "pretty-format": "^27.3.1",
         "restify-errors": "^8.0.2",
-        "soap": "^0.39.0",
+        "soap": "^1.0.0",
         "truncate": "^2.0.1",
         "uuid": "^9.0.0",
         "xml2js": "^0.4.19"
