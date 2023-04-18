@@ -1,0 +1,22 @@
+version: '3'
+services:
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+  oracledb:
+    image: gvenzl/oracle-xe:18-slim
+    ports:
+      - 1521:1521
+      - 5500:5500
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      SA_PASSWORD: "root@RDSL"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"

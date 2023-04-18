@@ -44,7 +44,9 @@
         "eslint-plugin-import": "^2.16.0",
         "mocha": "^10.2.0",
         "mongoose": "^7.0.4",
-        "nodemon": "^2.0.20"
+        "mssql": "^9.1.1",
+        "nodemon": "^2.0.20",
+        "oracledb": "^5.5.0"
     },
     "dependencies": {
         "amqplib": "^0.8.0",
