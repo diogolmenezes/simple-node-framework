@@ -1,3 +1,5 @@
+6.0.10
+  - [BUGFIX] Fix res.send warning and fix xml2js security error
 6.0.9
   - [CHORE] Updating soap lib
 6.0.8
