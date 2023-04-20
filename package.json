@@ -34,13 +34,19 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "lint": "clear;./node_modules/.bin/eslint ./lib"
+        "lint": "clear;./node_modules/.bin/eslint ./lib",
+        "test:integration": "clear;export CONFIG_FILE=./lib/tests/integration/fake-config.js NODE_ENV=testing; mocha ./**/*.integration.js"
     },
     "license": "ISC",
     "devDependencies": {
+        "chai": "^4.3.7",
         "eslint": "^8.25.0",
         "eslint-plugin-import": "^2.16.0",
-        "nodemon": "^2.0.20"
+        "mocha": "^10.2.0",
+        "mongoose": "^7.0.4",
+        "mssql": "^9.1.1",
+        "nodemon": "^2.0.20",
+        "oracledb": "^5.5.0"
     },
     "dependencies": {
         "amqplib": "^0.8.0",
