@@ -1,3 +1,5 @@
+6.0.11
+  - [FEAT] Adding config do middlewares
 6.0.10
   - [BUGFIX] Fix res.send warning and fix xml2js security error
 6.0.9
