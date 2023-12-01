@@ -1,3 +1,5 @@
+6.0.12
+  - [BUGFIX] Updating npm libs
 6.0.11
   - [FEAT] Adding config do middlewares
 6.0.10

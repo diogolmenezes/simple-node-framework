@@ -1,6 +1,6 @@
 {
     "name": "simple-node-framework",
-    "version": "6.0.11",
+    "version": "6.0.12",
     "keywords": [
         "basic",
         "simple",
@@ -40,7 +40,7 @@
     "devDependencies": {
         "eslint": "^8.25.0",
         "eslint-plugin-import": "^2.16.0",
-        "nodemon": "^2.0.20"
+        "nodemon": "^3.0.1"
     },
     "dependencies": {
         "amqplib": "^0.8.0",
@@ -59,7 +59,7 @@
         "object-hash": "^3.0.0",
         "pretty-format": "^27.3.1",
         "restify-errors": "^8.0.2",
-        "soap": "^1.0.0",
+        "soap": "^0.45.0",
         "truncate": "^2.0.1",
         "uuid": "^9.0.0",
         "xml2js": "^0.5.0"
