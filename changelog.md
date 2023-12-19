@@ -1,3 +1,5 @@
+6.0.13
+  - [BUGFIX] Ajustando a ordem de chamada do cors
 6.0.12
   - [BUGFIX] Updating npm libs
 6.0.11
