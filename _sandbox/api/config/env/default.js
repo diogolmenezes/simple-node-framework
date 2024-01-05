@@ -1,30 +1,31 @@
-{
+module.exports = {
     "app": {
         "name": "my-application",
         "baseRoute": "/api",
         "port": 8094
     },
     "cors": {
-        "preflightMaxAge": 5,
-        "origins": [
-            "*"
-        ],
-        "allowHeaders": [
+        "origin": '*',
+        "allowedHeaders": [
+            "Content-type",
+            "Authorization",
+            "Cache-Control",
             "x-origin-channel",
             "x-origin-application",
             "x-origin-device"
-        ],
-        "exposeHeaders": []
+        ]
     },
-    "db": {
-        "application": {
-            "url": "mongodb://localhost:27017/my-application",
-            "options": {
-                "useNewUrlParser": true,
-                "poolSize": 10
-            }
-        }
-    },
+    // "db": {
+    //     "mongodb": {
+    //         "application": {
+    //             "url": "mongodb://localhost:27017/my-application",
+    //             "options": {
+    //                 "useNewUrlParser": true,
+    //                 "poolSize": 10
+    //             }
+    //         }
+    //     }
+    // },
     "redis": {
         "host": "localhost",
         "port": 6379
@@ -57,8 +58,12 @@
     "authorization": {
         "enabled": true,
         "basic": {
-            "username": "admin",
-            "password": "admin"
+            "users": [
+                { 
+                    "username": "admin",
+                    "password": "admin"
+                }
+            ]
         },
         "jwt": {
             "secret": "49b4e2f9-ec31-4758-bae5-741a80e0e8de",

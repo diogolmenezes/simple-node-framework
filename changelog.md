@@ -1,7 +1,35 @@
-4.0.9
- - [FEAT] Adding the possibility to send the request_id as a parameter
-4.0.7
- - [BUGFIX] Adding _scope property do use scope on server.use middleware
+6.0.13
+  - [BUGFIX] Ajustando a ordem de chamada do cors
+6.0.12
+  - [BUGFIX] Updating npm libs
+6.0.11
+  - [FEAT] Adding config do middlewares
+6.0.10
+  - [BUGFIX] Fix res.send warning and fix xml2js security error
+6.0.9
+  - [CHORE] Updating soap lib
+6.0.8
+  - [FEAT] Adding the possibility to send the request_id as a parameter 
+6.0.7
+  - [FEAT] Dont log response time for urls in ignore list
+6.0.6
+  - [FEAT] Adding headerCallback to response log
+6.0.5
+  - [FEAT] Adding automatic timer for response logs and bodyCallback to response log
+6.0.4
+  - [FEAT] loging cache hits when this.config.cache.logHits is enabled
+6.0.3
+  - [CHORE] updating jwt lib
+6.0.2
+  - [CHORE] Fix jwt bug
+6.0.1
+  - [CHORE] Exporting baseserver
+6.0.0
+  - [BUGFIX] Fix server names
+5.0.6-beta
+  - [BUGFIX] Adding _scope property to use scope on server.use middleware
+5.0.5-beta
+    [NODE 18]
 4.0.6
  - [BUGFIX] Bugfix on new way to add snfUsers
 4.0.5
