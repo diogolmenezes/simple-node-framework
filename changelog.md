@@ -1,3 +1,5 @@
+6.0.14
+  - [BUGFIX] Ajustando bug que fazia o log do tempo de resposta ficar sem a URL
 6.0.13
   - [BUGFIX] Ajustando a ordem de chamada do cors
 6.0.12
