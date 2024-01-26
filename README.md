@@ -1475,9 +1475,39 @@ Than you can use you sampleError:
     }
 ```
 
-## snfrc config
+## YAML config
 
-Added possibility of using a file (snfrc.yml | snfrc.yaml) at the root of the project, all settings mentioned in this document remain valid
+Added possibility of using a file (config.yml | config.yaml) at the root of the project, all settings mentioned in this document remain valid.
+
+The framework load default config and try load an override config with environment suffix.
+
+Example (**NODE_ENV** is set to `staging`):
+
+```yaml
+app:
+    name: default name
+# some other attributes omitted
+
+# config.yaml
+```
+
+```yaml
+app:
+    name: staging name
+# some other attributes omitted
+
+# config.staging.yaml
+```
+
+The output config is:
+```javascript
+{
+    app: {
+        name: 'staging name'
+    }
+}
+```
+
 
 
 ## Test
