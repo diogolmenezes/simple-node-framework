@@ -1475,6 +1475,11 @@ Than you can use you sampleError:
     }
 ```
 
+## snfrc config
+
+Added possibility of using a file (snfrc.yml | snfrc.yaml) at the root of the project, all settings mentioned in this document remain valid
+
+
 ## Test
 
 SNF provides some test facilities especially if you are using SNF by an [create-snf-app](https://github.com/diogolmenezes/create-snf-app) application.
