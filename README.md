@@ -1475,6 +1475,41 @@ Than you can use you sampleError:
     }
 ```
 
+## YAML config
+
+Added possibility of using a file (config.yml | config.yaml) at the root of the project, all settings mentioned in this document remain valid.
+
+The framework load default config and try load an override config with environment suffix.
+
+Example (**NODE_ENV** is set to `staging`):
+
+```yaml
+app:
+    name: default name
+# some other attributes omitted
+
+# config.yaml
+```
+
+```yaml
+app:
+    name: staging name
+# some other attributes omitted
+
+# config.staging.yaml
+```
+
+The output config is:
+```javascript
+{
+    app: {
+        name: 'staging name'
+    }
+}
+```
+
+
+
 ## Test
 
 SNF provides some test facilities especially if you are using SNF by an [create-snf-app](https://github.com/diogolmenezes/create-snf-app) application.
