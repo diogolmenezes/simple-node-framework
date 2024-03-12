@@ -1,3 +1,5 @@
+6.0.16
+  - [FEAT] Adding SIGTERM
 6.0.15
   - [FEAT] Adding yaml config files
 6.0.14
