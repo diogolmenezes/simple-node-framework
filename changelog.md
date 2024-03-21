@@ -1,4 +1,4 @@
-6.0.16
+6.0.17
   - [FEAT] Removing SIGKILL
 6.0.16
   - [FEAT] Adding SIGTERM
