@@ -1,3 +1,5 @@
+6.0.18
+  - [FEAT] Removing restifyerror reference
 6.0.17
   - [FEAT] Removing SIGKILL
 6.0.16
