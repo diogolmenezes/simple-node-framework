@@ -21,6 +21,7 @@ SNF is a simple node-js framework that provides simple ways to use log, cache, d
 -   [Util](#util)
 -   [Erros](#erros)
 -   [Test](#test)
+-   [Kubernetes](#kubernetes)
 
 ## Quick Start
 
@@ -1513,3 +1514,9 @@ The output config is:
 ## Test
 
 SNF provides some test facilities especially if you are using SNF by an [create-snf-app](https://github.com/diogolmenezes/create-snf-app) application.
+
+## Kubernetes
+
+SNF provides some facilities for Kubernetes
+
+- auto attach readiness probe http route GET /snf/readiness-probe
