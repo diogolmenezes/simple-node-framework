@@ -1519,4 +1519,4 @@ SNF provides some test facilities especially if you are using SNF by an [create-
 
 SNF provides some facilities for Kubernetes
 
-- auto attach readiness probe http route GET /snf/readiness-probe
+- auto attach startup probe http route GET /snf/startup-probe
