@@ -1,3 +1,5 @@
+6.0.19
+  - [FEAT] Adding Startup probe
 6.0.18
   - [FEAT] Removing restifyerror reference
 6.0.17
