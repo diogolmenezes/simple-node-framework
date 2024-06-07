@@ -1,3 +1,5 @@
+6.0.20
+  - [FEAT] Adding name on uncaughtException erros
 6.0.19
   - [FEAT] Adding Startup probe
 6.0.18
