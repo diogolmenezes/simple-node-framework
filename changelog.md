@@ -1,3 +1,7 @@
+6.0.22
+  - [FEAT] Ajustando parser de variaveis ambiente
+6.0.21
+  - [FEAT] Ajustando parser de variaveis ambiente
 6.0.20
   - [FEAT] Adding name on uncaughtException erros
 6.0.19
