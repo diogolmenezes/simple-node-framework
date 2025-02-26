@@ -1,4 +1,4 @@
-6.0.23
+6.0.34
   - [FEAT] Travando a versao do compression por conta do bug no sensedia
 6.0.22
   - [FEAT] Ajustando parser de variaveis ambiente
