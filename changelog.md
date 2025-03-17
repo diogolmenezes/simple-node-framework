@@ -1,3 +1,5 @@
+6.0.35
+  - [FEAT] Flag para desligar ou ligar o log do lastLogin no basicDatabase
 6.0.34
   - [FEAT] Travando a versao do compression por conta do bug no sensedia
 6.0.22
