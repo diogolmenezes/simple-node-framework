@@ -1,3 +1,5 @@
+6.0.37
+  - [BUGFIX] Corrigindo o erro do Authorization nulo
 6.0.36
   - [FEAT] Flag para desligar ou ligar o log do lastLogin no basicDatabase
 6.0.34
