@@ -1,3 +1,5 @@
+6.0.38
+  - [BUGFIX] Corrigindo o o log do body no response
 6.0.37
   - [BUGFIX] Corrigindo o erro do Authorization nulo
 6.0.36
