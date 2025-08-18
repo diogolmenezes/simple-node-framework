@@ -1,3 +1,5 @@
+6.0.39
+  - [BUGFIX] Adiciona decremento para conexões de BD
 6.0.38
   - [BUGFIX] Corrigindo o o log do body no response
 6.0.37
