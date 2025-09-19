@@ -1,3 +1,5 @@
+6.0.41
+  - [BUGFIX] Ajuste so na documentacao
 6.0.40
   - [BUGFIX] Corrige erro 500 quando header de autorização não é informado 
 6.0.39

@@ -270,7 +270,7 @@ You can disable database handler by removing the "db" node at configuration file
                 "url": "mongodb://localhost:27017/my-database",
                 "options": {
                     "useNewUrlParser": true,
-                    "poolSize": 10
+                    "maxPoolSize": 10
                 }
             },
             "second": {
@@ -279,8 +279,8 @@ You can disable database handler by removing the "db" node at configuration file
                     "user": "some-user",
                     "pass": "some-password",
                     "useMongoClient": true,
-                    "poolSize": 10,
-                    "keepAlive": 300000,
+                    "maxPoolSize": 10,
+                    "socketTimeoutMS": 300000,
                     "connectTimeoutMS": 30000
                 }
             }
@@ -319,7 +319,7 @@ To enable mongodb just add mongodb configuration to config db node and install m
                 "url": "mongodb://localhost:27017/my-database",
                 "options": {
                     "useNewUrlParser": true,
-                    "poolSize": 10
+                    "maxPoolSize": 10
                 }
             },
             "second": {
@@ -327,9 +327,8 @@ To enable mongodb just add mongodb configuration to config db node and install m
                 "options": {
                     "user": "some-user",
                     "pass": "some-password",
-                    "useMongoClient": true,
-                    "poolSize": 10,
-                    "keepAlive": 300000,
+                    "maxPoolSize": 10,
+                    "socketTimeoutMS": 300000,
                     "connectTimeoutMS": 30000
                 }
             }
