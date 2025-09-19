@@ -268,8 +268,7 @@ You can disable database handler by removing the "db" node at configuration file
         "mongodb": {
             "first": {
                 "url": "mongodb://localhost:27017/my-database",
-                "options": {
-                    "useNewUrlParser": true,
+                "options": {                
                     "maxPoolSize": 10
                 }
             },
@@ -318,7 +317,6 @@ To enable mongodb just add mongodb configuration to config db node and install m
             "first": {
                 "url": "mongodb://localhost:27017/my-database",
                 "options": {
-                    "useNewUrlParser": true,
                     "maxPoolSize": 10
                 }
             },
