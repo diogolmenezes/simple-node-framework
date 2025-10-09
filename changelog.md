@@ -1,3 +1,5 @@
+6.0.42
+  - [BUGFIX] Nao roda o plugin de origin para OPTIONS
 6.0.41
   - [BUGFIX] Ajuste so na documentacao
 6.0.40
