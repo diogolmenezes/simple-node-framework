@@ -8,6 +8,7 @@ SNF is a simple node-js framework that provides simple ways to use log, cache, d
 -   [Log](#log)
 -   [Database](#database)
 -   [Redis](#redis)
+-   [Queue](#queue)
 -   [Cache](#cache)
 -   [Session](#session)
 -   [Authorization](#authorization)
@@ -84,7 +85,7 @@ Base classes are the most used strategy in SNF. Your class can inherit the base 
 | BaseRepository | Log and timer features, the this.log and this.timer objects will be ready to use                                               |
 | BaseRest       | Rest features. this.fetch (node-fetch), this.responseHandler, this.log and this.timer objects will be ready to use             |
 | BaseSoap       | Soap features. this.fetch (node-fetch), this.soap (soap), this.xml_parser this.log and this.timer objects will be ready to use |
-| Loggable       | Log features, the this.log object will be ready to use                                                                         |
+| Loggable       | Log features, the this.log object will be ready to use (imported from the root: `require('simple-node-framework').Loggable`, not from `.Base`) |
 
 ```javascript
 const { BaseController } = require('simple-node-framework').Base;
@@ -101,7 +102,7 @@ class Controller extends BaseController {
     async load(req, res, next) {
         super.activateRequestLog(req);
         this.log.debug('This is only a sample');
-        req.send(200);
+        res.sendStatus(200);
         return next();
     }
 }
@@ -163,7 +164,7 @@ If you need to output bunyan logs to process.stdout, do this configuration
 ```javascript
 this.log.info('Sample info log');
 this.log.debug('Sample debug log', { people, status: 'active' });
-this.log.warg('Sample warn log');
+this.log.warn('Sample warn log');
 this.log.error('Sample error log', error);
 this.log.fatal('Sample fatal log', error);
 ```
@@ -575,6 +576,46 @@ redis.del('some-application:some-user:age');
 redis.delPattern('some-application:*');
 ```
 
+### Redis mock (in-memory)
+
+For tests or local runs without a redis server, enable an in-memory mock by adding a `mock` object to the redis config. When present, `set`/`get`/`del`/`delPattern` operate on this object instead of connecting to redis.
+
+```json
+    "redis": {
+        "mock": {}
+    }
+```
+
+## Queue
+
+SNF has an AMQP queue handler (RabbitMQ) that simplifies the connection.
+
+> By the way, we use [amqplib](https://www.npmjs.com/package/amqplib) as amqp client. Install it with `npm i amqplib`.
+
+Enable it by adding the `queue` node to the configuration file. Removing the node disables the handler.
+
+```json
+    "queue": {
+        "host": "localhost"
+    }
+```
+
+The connection is opened automatically after the server starts and closed on shutdown. Use the exposed `connection` and `channel` (raw amqplib objects) to publish/consume:
+
+```javascript
+const { queue } = require('simple-node-framework').Singleton;
+
+// publish
+queue.channel.assertQueue('my-queue');
+queue.channel.sendToQueue('my-queue', Buffer.from('hello'));
+
+// consume
+queue.channel.consume('my-queue', (msg) => {
+    console.log(msg.content.toString());
+    queue.channel.ack(msg);
+});
+```
+
 ## Cache
 
 SNF has a cache handler that uses redis to save responses on the cache.
@@ -606,7 +647,7 @@ class Controller extends BaseController {
 
     get(req, res, next) {
         const message = 'Sample controller test';
-        res.send(200, message);
+        res.status(200).send(message);
         // save response in the cache
         const ttl = 300000;
         req.cache.saveResponse(200, message, res.headers, req, ttl);
@@ -617,9 +658,9 @@ class Controller extends BaseController {
 module.exports = Controller;
 ```
 
-After this the cache handler will save in your redis the key:
+After this the cache handler will save in your redis the key (the trailing hash is generated from the request body and the whole key is lowercased):
 
-`simple-node-framework:cache:my-application:get:api/sample-module`
+`simple-node-framework:cache:my-application:get:api/sample-module:<body-hash>`
 
 To automaticaly retreive your information, you need to configure the Cache.loadResponse middleware, so your controller will start get the information from the cache:
 
@@ -646,7 +687,17 @@ This way, you can have unique user caches.
     }
 ```
 
-`simple-node-framework:user-identifier:cache:my-application:get:api/sample-module`
+`simple-node-framework:user-identifier:cache:my-application:get:api/sample-module:<body-hash>`
+
+Additional cache config:
+
+| Key             | Description                                                          |
+| --------------- | ------------------------------------------------------------------- |
+| `cache.prefix`  | Key prefix (defaults to `simple-node-framework`).                   |
+| `cache.logHit`  | When `true`, logs cache lookup attempts and errors.                 |
+| `cache.logHits` | When `true`, logs cache hits.                                       |
+
+You can also read/write arbitrary keys directly with the `save(key, value, ttl)` and `load(key)` aliases (thin wrappers over redis `set`/`get`).
 
 ## Session
 
@@ -680,17 +731,17 @@ class AccountController extends BaseController {
             // create the session
             req.session.data.name = 'Diogo';
             req.session.create('some-user-identifier');
-            res.send(200, 'Sample session controller test');
+            res.status(200).send('Sample session controller test');
         }
 
-        res.send(401);
+        res.sendStatus(401);
         return next();
     }
 
     logout(req, res, next) {
         // destroy the session
         req.session.destroy();
-        res.send(200, 'Sample session controller test');
+        res.status(200).send('Sample session controller test');
         return next();
     }
 }
@@ -717,7 +768,7 @@ class UserController extends BaseController {
         req.session.load('some-user-identifier');
         req.session.data.name = 'Diogo Menezes';
         req.session.update();
-        res.send(200, 'Sample session controller test');
+        res.status(200).send('Sample session controller test');
         return next();
     }
 }
@@ -749,10 +800,10 @@ class AccountController extends BaseController {
             req.session.data.name = 'Diogo';
             // the session is automaticaly be created with "x-identifier" in the key
             req.session.create();
-            res.send(200, 'Sample session controller test');
+            res.status(200).send('Sample session controller test');
         }
 
-        res.send(401);
+        res.sendStatus(401);
         return next();
     }
 }
@@ -768,7 +819,7 @@ class UserController extends BaseController {
         // the session is automaticaly loaded  if you send "x-identifier" at the header
         req.session.data.name = 'Diogo Menezes';
         req.session.update();
-        res.send(200, 'Sample session controller test');
+        res.status(200).send('Sample session controller test');
         return next();
     }
 }
@@ -823,7 +874,7 @@ class Controller extends BaseController {
     }
 
     get(req, res, next) {
-        res.send(200, 'Sample controller test');
+        res.status(200).send('Sample controller test');
         return next();
     }
 }
@@ -935,7 +986,7 @@ class Controller extends BaseController {
     }
 
     get(req, res, next) {
-        res.send(200, 'Sample controller test');
+        res.status(200).send('Sample controller test');
         return next();
     }
 }
@@ -995,7 +1046,7 @@ class Controller extends BaseController {
     }
 
     get(req, res, next) {
-        res.send(200, 'Sample controller test');
+        res.status(200).send('Sample controller test');
         return next();
     }
 }
@@ -1027,10 +1078,10 @@ class AccountController extends BaseController {
         if (user) {
             // create the JWT token to use as Bearer Token
             const token = authorization.createJWT({ name = user.name })
-            res.send(200, token);
+            res.status(200).send(token);
         }
 
-        res.send(403);
+        res.sendStatus(403);
         return next();
     }
 }
@@ -1082,7 +1133,7 @@ class Controller extends BaseController {
     }
 
     get(req, res, next) {
-        res.send(200, 'Sample controller test');
+        res.status(200).send('Sample controller test');
         return next();
     }
 }
@@ -1119,7 +1170,7 @@ class CustomAuthorization extends Authorization {
             req.user = req.username;
             next();
         } else {
-            next(this.applicationErrors.throw('Invalid username or password', 'ForbiddenError'));
+            next(this.errorHandler.throw('Invalid username or password', 'ForbiddenError'));
         }
     }
 }
@@ -1138,8 +1189,8 @@ const { Security } = require('simple-node-framework');
 
 ...
     const security  = new Security();
-    const encrypted = security.encrypt('text');
-    const plain     = security.decrypt(encrypted);
+    const encrypted = await security.encrypt('text');
+    const plain     = await security.decrypt(encrypted);
 ...
 ```
 
@@ -1147,7 +1198,33 @@ const { Security } = require('simple-node-framework');
 
 The server class is the most important class in SNF because there we configure all other plugins, middlewares and helpers.
 
-> By the way, we use [restify](https://www.npmjs.com/package/restify) as rest framework.
+> By the way, we use [express](https://www.npmjs.com/package/express) as rest framework.
+
+### Server configuration
+
+Optional configuration nodes read by the server:
+
+```json
+    "app": {
+        "healthCheck": "/health"
+    },
+    "cors": {
+        "origin": "*"
+    },
+    "middlewares": {
+        "compression": {},
+        "bodyParser": {
+            "json": { "limit": "1mb" }
+        }
+    }
+```
+
+| Node                        | Description                                                                                     |
+| --------------------------- | ----------------------------------------------------------------------------------------------- |
+| `app.healthCheck`           | Health check route path (defaults to `/`). Returns app name, environment and hostname.          |
+| `cors`                      | [cors](https://www.npmjs.com/package/cors) options. When present, CORS is enabled with them.    |
+| `middlewares.compression`   | [compression](https://www.npmjs.com/package/compression) options.                               |
+| `middlewares.bodyParser.json` | [body-parser](https://www.npmjs.com/package/body-parser) json options.                        |
 
 ### Custom server
 
@@ -1164,15 +1241,9 @@ class CustomServer extends Server {
     }
 
     // You can override server methods :)
-    applyMiddlewares() {
-        super.applyMiddlewares();
+    configureMiddlewares() {
+        super.configureMiddlewares();
         this.log.debug('This is only a custom messagem from your custom server :)');
-    }
-
-    // You can override server methods :)
-    applyAudit() {
-        super.applyAudit();
-        this.log.debug('This is only another custom messagem from your custom server :)');
     }
 
     // .. you can override all other methods ...
@@ -1180,7 +1251,7 @@ class CustomServer extends Server {
 
 const customServer = new CustomServer();
 const server = customServer.configure({
-    afterListenCallBack: () => {
+    afterListenCallback: () => {
         customServer.log.debug('It works!');
     }
 });
@@ -1193,7 +1264,7 @@ module.exports = {
 
 ### Custom Server after listen callback
 
-To run custom code after server listen, you have to send an afterListenCallBack
+To run custom code after server listen, you have to send an afterListenCallback
 
 ```javascript
 const { Server } = require('simple-node-framework');
@@ -1208,7 +1279,7 @@ class CustomServer extends Server {
 
 const customServer = new CustomServer();
 const server = customServer.configure({
-    afterListenCallBack: () => {
+    afterListenCallback: () => {
         customServer.log.debug('It works!');
     }
 });
@@ -1368,7 +1439,7 @@ class Controller extends BaseController {
         // this.scope
         // Object {_chain: Array(4), name: "diogo", age: 34}
 
-        req.send(200);
+        res.sendStatus(200);
         
         return next();
     }
@@ -1418,6 +1489,37 @@ The method's arguments contract are *actor, origin, action, label, object, descr
 
 
 ## Util
+
+### Helper
+
+Static helper methods.
+
+```javascript
+const { Helper } = require('simple-node-framework');
+
+// replace tokens in a string
+// ex.: 'http://google.com/profile/123'
+Helper.replaceWith('http://google.com/profile/:id', { ':id': 123 });
+
+// get the request id (from the "request_id" header, req.id, or a generated uuid without dashes)
+const id = Helper.requestId(req);
+```
+
+### ProcessTimer
+
+Measures the elapsed time of a routine. All base classes already expose a ready `this.timer`.
+
+```javascript
+const { ProcessTimer } = require('simple-node-framework');
+
+const timer = new ProcessTimer();
+const start = timer.start();
+// do something...
+const interval = timer.stop(start); // { seconds, milliseconds, nanoseconds, date }
+
+// or log the response time automatically
+timer.writeLog(start, 'my-feature');
+```
 
 ## Errors
 
@@ -1511,6 +1613,23 @@ The output config is:
 ## Test
 
 SNF provides some test facilities especially if you are using SNF by an [create-snf-app](https://github.com/diogolmenezes/create-snf-app) application.
+
+The `TestHelper` class turns off console logs before the suite and closes the redis/database connections after it.
+
+```javascript
+const { TestHelper } = require('simple-node-framework');
+
+before(() => {
+    // turns off console logs (pass { consoleLogs: true } to keep them)
+    TestHelper.before();
+});
+
+after(() => {
+    // closes redis and database connections
+    // opt out with { closeRedis: false } / { closeDatabase: false }
+    TestHelper.after();
+});
+```
 
 ## Kubernetes
 
